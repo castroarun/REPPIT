@@ -60,10 +60,10 @@ export default function SessionSummary({ onClose, session }: SessionSummaryProps
   const isProductive = stats.totalSets > 0
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 rounded-t-2xl text-white">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-white dark:bg-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
+        {/* Header - Fixed */}
+        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 rounded-t-2xl text-white flex-shrink-0">
           <div className="text-center">
             <div className="text-5xl mb-3">
               {isProductive ? '💪' : '👋'}
@@ -77,8 +77,8 @@ export default function SessionSummary({ onClose, session }: SessionSummaryProps
           </div>
         </div>
 
-        {/* Summary Stats */}
-        <div className="p-6">
+        {/* Summary Stats - Scrollable */}
+        <div className="p-6 overflow-y-auto flex-1" style={{ WebkitOverflowScrolling: 'touch' }}>
           {isProductive ? (
             <>
               {/* Main stats grid */}
@@ -241,7 +241,7 @@ export default function SessionSummary({ onClose, session }: SessionSummaryProps
               )}
 
               {/* Motivational message */}
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 mb-6 text-center">
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 text-center">
                 <p className="text-sm text-gray-700 dark:text-gray-300 italic">
                   {session.prsAchieved.length > 0 || session.levelUps.length > 0
                     ? "Outstanding work! You're getting stronger every day! 💯"
@@ -260,8 +260,10 @@ export default function SessionSummary({ onClose, session }: SessionSummaryProps
               </p>
             </div>
           )}
+        </div>
 
-          {/* Done button */}
+        {/* Done button - Fixed at bottom */}
+        <div className="p-6 pt-0 flex-shrink-0 bg-white dark:bg-gray-900 rounded-b-2xl">
           <button
             onClick={onClose}
             className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl"
