@@ -37,14 +37,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
-
-        // Create user record on first sign in
-        if (event === 'SIGNED_IN' && session?.user) {
-          await createUserRecord(session.user)
-        }
+        setIsLoading(false)
       }
     )
 
@@ -52,25 +48,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       subscription.unsubscribe()
     }
   }, [isConfigured])
-
-  // Create user record in public.users table
-  const createUserRecord = async (user: User) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase as any)
-      .from('users')
-      .upsert({
-        id: user.id,
-        email: user.email,
-        display_name: user.user_metadata?.full_name || user.email?.split('@')[0],
-        avatar_url: user.user_metadata?.avatar_url
-      }, {
-        onConflict: 'id'
-      })
-
-    if (error) {
-      console.error('Error creating user record:', error)
-    }
-  }
 
   const signInWithGoogle = useCallback(async () => {
     if (!isConfigured) {
