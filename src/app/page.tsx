@@ -1,15 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Profile, VALIDATION } from '@/types'
 import { getProfiles, getProfileById, syncProfilesFromCloud } from '@/lib/storage/profiles'
 import { setupSyncListeners, hasPendingSync, processSyncQueue } from '@/lib/storage/sync'
+import { loadSampleData, hasSampleData } from '@/lib/storage/seedData'
 import { ProfileCard, EmptyProfileSlot } from '@/components/profile'
 import { ThemeToggle, UnitToggle, Logo } from '@/components/ui'
 import { LoginScreen } from '@/components/auth'
 import { useAuth } from '@/contexts'
+
+const TAP_COUNT_THRESHOLD = 7
+const TAP_TIMEOUT_MS = 2000
 
 export default function HomePage() {
   const router = useRouter()
@@ -18,6 +22,46 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [showLogin, setShowLogin] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
+
+  // Easter egg: tap logo 7 times to load sample data
+  const [tapCount, setTapCount] = useState(0)
+  const [showEasterEgg, setShowEasterEgg] = useState(false)
+  const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleLogoTap = useCallback(() => {
+    // Clear existing timeout
+    if (tapTimeoutRef.current) {
+      clearTimeout(tapTimeoutRef.current)
+    }
+
+    const newCount = tapCount + 1
+    setTapCount(newCount)
+
+    // Check if threshold reached
+    if (newCount >= TAP_COUNT_THRESHOLD) {
+      if (!hasSampleData()) {
+        loadSampleData()
+        setProfiles(getProfiles())
+        setShowEasterEgg(true)
+        setTimeout(() => setShowEasterEgg(false), 2000)
+      }
+      setTapCount(0)
+    } else {
+      // Reset after timeout
+      tapTimeoutRef.current = setTimeout(() => {
+        setTapCount(0)
+      }, TAP_TIMEOUT_MS)
+    }
+  }, [tapCount])
+
+  // Cleanup tap timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tapTimeoutRef.current) {
+        clearTimeout(tapTimeoutRef.current)
+      }
+    }
+  }, [])
 
   // Setup sync listeners
   useEffect(() => {
@@ -105,7 +149,13 @@ export default function HomePage() {
       <header className="bg-[#2C3E50] text-white px-4 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <Logo size="lg" />
+            <button
+              onClick={handleLogoTap}
+              className="focus:outline-none active:scale-95 transition-transform"
+              aria-label="REPPIT Logo"
+            >
+              <Logo size="lg" />
+            </button>
             <p className="text-xs text-gray-400 mt-0.5">Personal strength logger app</p>
             <p className="text-sm text-gray-300 mt-1">
               {profiles.length} of {VALIDATION.maxProfiles} profiles
@@ -119,15 +169,24 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Sync Status Banner */}
+      {/* Sync Status Banner - More prominent warning */}
       {!user && isConfigured && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2">
-          <p className="text-sm text-amber-700 dark:text-amber-300 text-center">
-            <Link href="/settings" className="underline hover:no-underline">
-              Sign in
-            </Link>
-            {' '}to sync your data across devices
-          </p>
+        <div className="bg-amber-50 dark:bg-amber-900/30 border-b-2 border-amber-300 dark:border-amber-700 px-4 py-3">
+          <div className="flex items-start gap-2 max-w-lg mx-auto">
+            <span className="text-xl flex-shrink-0">⚠️</span>
+            <div>
+              <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                Your data is only stored locally
+              </p>
+              <p className="text-xs text-amber-700 dark:text-amber-300 mt-0.5">
+                Uninstalling the app will delete all data.{' '}
+                <Link href="/settings" className="underline font-medium hover:no-underline">
+                  Sign in
+                </Link>
+                {' '}to backup to cloud.
+              </p>
+            </div>
+          </div>
         </div>
       )}
 
@@ -176,6 +235,21 @@ export default function HomePage() {
         )}
 
       </main>
+
+      {/* Tap counter indicator (subtle) */}
+      {tapCount > 0 && tapCount < TAP_COUNT_THRESHOLD && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-gray-800/80 text-white text-xs px-3 py-1.5 rounded-full">
+          {TAP_COUNT_THRESHOLD - tapCount} more...
+        </div>
+      )}
+
+      {/* Easter egg success toast */}
+      {showEasterEgg && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce">
+          <span className="text-lg">🎉</span>
+          <span className="font-medium">Sample data loaded!</span>
+        </div>
+      )}
     </div>
   )
 }
