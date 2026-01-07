@@ -15,13 +15,67 @@ export interface WorkoutSession {
   levelUps: Array<{ exerciseId: string; exerciseName: string; newLevel: string }>
 }
 
-// Inactivity threshold in minutes
+// Inactivity threshold for showing "continue?" prompt (in minutes)
 export const INACTIVITY_THRESHOLD_MINUTES = 20
+
+// Auto-end threshold: 2 hours without activity = session is stale
+export const AUTO_END_THRESHOLD_MINUTES = 120
+
+/**
+ * Check if a session is from today
+ */
+function isSessionFromToday(session: WorkoutSession): boolean {
+  const sessionDate = new Date(session.startTime).toDateString()
+  const today = new Date().toDateString()
+  return sessionDate === today
+}
+
+/**
+ * Check if session is stale (over 2 hours since last activity OR from a different day)
+ */
+export function isSessionStale(session: WorkoutSession): boolean {
+  // If session is from a different day, it's stale
+  if (!isSessionFromToday(session)) {
+    return true
+  }
+
+  // If more than 2 hours since last activity, it's stale
+  const lastActivity = new Date(session.lastActivityTime).getTime()
+  const now = Date.now()
+  const minutesSinceActivity = (now - lastActivity) / 60000
+  return minutesSinceActivity >= AUTO_END_THRESHOLD_MINUTES
+}
 
 /**
  * Get current workout session from localStorage
+ * Automatically clears stale sessions (from previous days or >2 hours old)
  */
 export function getSession(): WorkoutSession | null {
+  if (typeof window === 'undefined') return null
+
+  const stored = localStorage.getItem(SESSION_KEY)
+  if (!stored) return null
+
+  try {
+    const session = JSON.parse(stored) as WorkoutSession
+
+    // Auto-clear stale sessions
+    if (isSessionStale(session)) {
+      // Session is stale - clear it
+      localStorage.removeItem(SESSION_KEY)
+      return null
+    }
+
+    return session
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Get session without auto-clearing (for showing summary of stale sessions)
+ */
+export function getSessionRaw(): WorkoutSession | null {
   if (typeof window === 'undefined') return null
 
   const stored = localStorage.getItem(SESSION_KEY)
@@ -229,4 +283,28 @@ export function formatSessionDuration(session: WorkoutSession): string {
     return `${hours}h ${minutes}m`
   }
   return `${minutes}m`
+}
+
+/**
+ * Check for stale session and return it for summary display
+ * Returns the stale session if found, then clears it
+ * Call this on app load to show yesterday's workout summary
+ */
+export function checkForStaleSession(): WorkoutSession | null {
+  const session = getSessionRaw()
+  if (!session) return null
+
+  // Check if it's stale
+  if (isSessionStale(session)) {
+    // Only return if there was actual workout data
+    const hasWorkoutData = Object.keys(session.exercises).length > 0
+
+    // Clear the stale session
+    clearSession()
+
+    // Return for summary display if it had data
+    return hasWorkoutData ? session : null
+  }
+
+  return null
 }
