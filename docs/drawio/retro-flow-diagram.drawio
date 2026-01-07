@@ -1,0 +1,89 @@
+<mxfile host="app.diagrams.net" modified="2024-12-20T00:00:00.000Z" agent="Claude Code" version="1.0">
+  <diagram name="Retrospective Flow" id="retro-flow">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="500" background="#1a1a2e">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title Banner -->
+        <mxCell id="title" value="RETROSPECTIVE LEARNINGS: Root Cause → Pain Point → Solution" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;fontColor=#e94560;fontSize=18;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="1000" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Column Headers -->
+        <mxCell id="header1" value="ROOT CAUSE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b85450;strokeColor=#b85450;fontColor=#ffffff;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="300" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="header2" value="PAIN POINT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d79b00;strokeColor=#d79b00;fontColor=#ffffff;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="300" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="header3" value="SOLUTION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=#82b366;fontColor=#ffffff;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="80" width="300" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1: Requirements -->
+        <mxCell id="cause1" value="Jumped to code without&#xa;validated requirements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#333333;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="140" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pain1" value="70% of time spent&#xa;firefighting bugs during build" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#333333;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="400" y="140" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sol1" value="@designer + @architect agents&#xa;with structured outputs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=12;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="140" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1 Arrows -->
+        <mxCell id="arrow1a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e94560;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="cause1" target="pain1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e94560;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="pain1" target="sol1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2: Context -->
+        <mxCell id="cause2" value="Context scattered&#xa;across chat history" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#333333;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="230" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pain2" value="Couldn't recall where execution&#xa;halted or decisions made" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#333333;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="400" y="230" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sol2" value="/jirastatus command for&#xa;project summary &amp; phase tracking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=12;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="230" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2 Arrows -->
+        <mxCell id="arrow2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e94560;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="cause2" target="pain2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e94560;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="pain2" target="sol2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3: Reviews -->
+        <mxCell id="cause3" value="Reviews mixed with&#xa;development workflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#333333;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="320" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pain3" value="Scrolling documents, asking&#xa;&quot;which file?&quot; repeatedly" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#333333;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="400" y="320" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sol3" value="Jira integration for external&#xa;review &amp; decision-making" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=12;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="320" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3 Arrows -->
+        <mxCell id="arrow3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e94560;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="cause3" target="pain3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e94560;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="pain3" target="sol3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Footer -->
+        <mxCell id="footer" value="Every component solves a problem that actually happened" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;fontColor=#e94560;fontSize=12;fontStyle=2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="410" width="1000" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

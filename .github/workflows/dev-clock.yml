@@ -1,0 +1,35 @@
+name: Dev Clock - Auto Time Tracking
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-dev-clock:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for commit analysis
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Calculate and update dev clock
+        run: node .github/scripts/update-dev-clock.js
+
+      - name: Commit updated DEV-CLOCK.md
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/DEV-CLOCK.md
+          git diff --staged --quiet || git commit -m "docs: auto-update DEV-CLOCK.md [skip ci]"
+          git push

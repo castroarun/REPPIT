@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REPPIT Logo Color Options</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f1a;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 32px;
+    }
+    .subtitle {
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .option-card {
+      background: #16213e;
+      border-radius: 20px;
+      padding: 28px;
+      text-align: center;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .option-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .option-card.selected {
+      border-color: #22c55e;
+    }
+    .option-number {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(255,255,255,0.1);
+      color: #94a3b8;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .option-card {
+      position: relative;
+    }
+    .option-title {
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .icon-preview {
+      margin-bottom: 20px;
+    }
+    .text-preview {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .color-chips {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    .chip-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+    .chip-label {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+    .recommended {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Phone mockup section */
+    .comparison-section {
+      background: #16213e;
+      border-radius: 20px;
+      padding: 32px;
+      margin-top: 40px;
+    }
+    .comparison-section h2 {
+      color: white;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .phone-grid {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .mini-phone {
+      width: 120px;
+      background: #111;
+      border-radius: 16px;
+      padding: 8px;
+      border: 2px solid #333;
+    }
+    .mini-screen {
+      background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+      border-radius: 12px;
+      padding: 16px 8px;
+      min-height: 180px;
+    }
+    .mini-app-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 4px;
+    }
+    .mini-app-label {
+      color: white;
+      font-size: 9px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>REPPIT Logo Color Options</h1>
+    <p class="subtitle">Click on any option to see it highlighted. Choose your favorite!</p>
+
+    <div class="options-grid">
+
+      <!-- Option 1: Original Green + Orange -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">1</span>
+        <span class="recommended">Original</span>
+        <div class="option-title">Fitness Energy</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1a1a2e"/><stop offset="100%" style="stop-color:#16213e"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg1)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#374151"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#f97316"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#f97316" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#f97316"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#f97316" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#22c55e" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#374151"/>
+            <circle cx="256" cy="400" r="12" fill="#22c55e"/>
+            <circle cx="312" cy="400" r="12" fill="#374151"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#22c55e">REP</span><span style="color:#f97316">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#22c55e"></div><span class="chip-label">Green</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#f97316"></div><span class="chip-label">Orange</span></div>
+        </div>
+      </div>
+
+      <!-- Option 2: Electric Blue + Cyan -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">2</span>
+        <div class="option-title">Electric Tech</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#0f172a"/><stop offset="100%" style="stop-color:#1e1b4b"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg2)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#374151"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#06b6d4"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#06b6d4" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#06b6d4"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#06b6d4" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#3b82f6" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#374151"/>
+            <circle cx="256" cy="400" r="12" fill="#3b82f6"/>
+            <circle cx="312" cy="400" r="12" fill="#374151"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#3b82f6">REP</span><span style="color:#06b6d4">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#3b82f6"></div><span class="chip-label">Blue</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#06b6d4"></div><span class="chip-label">Cyan</span></div>
+        </div>
+      </div>
+
+      <!-- Option 3: Red + Gold -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">3</span>
+        <div class="option-title">Power Champion</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1c1917"/><stop offset="100%" style="stop-color:#292524"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg3)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#44403c"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#eab308"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#eab308" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#eab308"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#eab308" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#ef4444" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#44403c"/>
+            <circle cx="256" cy="400" r="12" fill="#ef4444"/>
+            <circle cx="312" cy="400" r="12" fill="#44403c"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#ef4444">REP</span><span style="color:#eab308">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#ef4444"></div><span class="chip-label">Red</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#eab308"></div><span class="chip-label">Gold</span></div>
+        </div>
+      </div>
+
+      <!-- Option 4: Purple + Pink -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">4</span>
+        <div class="option-title">Neon Vibes</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1e1b4b"/><stop offset="100%" style="stop-color:#312e81"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg4)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#4c1d95"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#ec4899"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#ec4899" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#ec4899"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#ec4899" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#a855f7" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#4c1d95"/>
+            <circle cx="256" cy="400" r="12" fill="#a855f7"/>
+            <circle cx="312" cy="400" r="12" fill="#4c1d95"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#a855f7">REP</span><span style="color:#ec4899">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#a855f7"></div><span class="chip-label">Purple</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#ec4899"></div><span class="chip-label">Pink</span></div>
+        </div>
+      </div>
+
+      <!-- Option 5: Teal + Lime -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">5</span>
+        <div class="option-title">Fresh Active</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#042f2e"/><stop offset="100%" style="stop-color:#134e4a"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg5)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#115e59"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#84cc16"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#84cc16" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#84cc16"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#84cc16" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#14b8a6" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#115e59"/>
+            <circle cx="256" cy="400" r="12" fill="#14b8a6"/>
+            <circle cx="312" cy="400" r="12" fill="#115e59"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#14b8a6">REP</span><span style="color:#84cc16">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#14b8a6"></div><span class="chip-label">Teal</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#84cc16"></div><span class="chip-label">Lime</span></div>
+        </div>
+      </div>
+
+      <!-- Option 6: White + Silver (Minimal) -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">6</span>
+        <div class="option-title">Minimal Pro</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg6" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#18181b"/><stop offset="100%" style="stop-color:#27272a"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg6)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#3f3f46"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#a1a1aa"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#a1a1aa" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#a1a1aa"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#a1a1aa" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#ffffff" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#3f3f46"/>
+            <circle cx="256" cy="400" r="12" fill="#ffffff"/>
+            <circle cx="312" cy="400" r="12" fill="#3f3f46"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#ffffff">REP</span><span style="color:#a1a1aa">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#ffffff"></div><span class="chip-label">White</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#a1a1aa"></div><span class="chip-label">Silver</span></div>
+        </div>
+      </div>
+
+      <!-- Option 7: Sunset (Orange + Yellow) -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">7</span>
+        <div class="option-title">Sunset Fire</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg7" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#431407"/><stop offset="100%" style="stop-color:#7c2d12"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg7)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#78350f"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#fbbf24"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#fbbf24" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#fbbf24"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#fbbf24" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#f97316" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#78350f"/>
+            <circle cx="256" cy="400" r="12" fill="#f97316"/>
+            <circle cx="312" cy="400" r="12" fill="#78350f"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#f97316">REP</span><span style="color:#fbbf24">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#f97316"></div><span class="chip-label">Orange</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#fbbf24"></div><span class="chip-label">Yellow</span></div>
+        </div>
+      </div>
+
+      <!-- Option 8: Rose + Coral -->
+      <div class="option-card" onclick="this.classList.toggle('selected')">
+        <span class="option-number">8</span>
+        <div class="option-title">Coral Bloom</div>
+        <div class="icon-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100" height="100">
+            <defs>
+              <linearGradient id="bg8" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1f1315"/><stop offset="100%" style="stop-color:#3b1c2a"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="96" fill="url(#bg8)"/>
+            <rect x="80" y="244" width="352" height="24" rx="12" fill="#4a1c2a"/>
+            <rect x="60" y="180" width="40" height="152" rx="8" fill="#fb7185"/>
+            <rect x="108" y="200" width="28" height="112" rx="6" fill="#fb7185" opacity="0.8"/>
+            <rect x="412" y="180" width="40" height="152" rx="8" fill="#fb7185"/>
+            <rect x="376" y="200" width="28" height="112" rx="6" fill="#fb7185" opacity="0.8"/>
+            <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#f43f5e" text-anchor="middle">R</text>
+            <circle cx="200" cy="400" r="12" fill="#4a1c2a"/>
+            <circle cx="256" cy="400" r="12" fill="#f43f5e"/>
+            <circle cx="312" cy="400" r="12" fill="#4a1c2a"/>
+          </svg>
+        </div>
+        <div class="text-preview">
+          <span style="color:#f43f5e">REP</span><span style="color:#fb7185">PIT</span>
+        </div>
+        <div class="color-chips">
+          <div class="chip"><div class="chip-swatch" style="background:#f43f5e"></div><span class="chip-label">Rose</span></div>
+          <div class="chip"><div class="chip-swatch" style="background:#fb7185"></div><span class="chip-label">Coral</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- App Icon Comparison -->
+    <div class="comparison-section">
+      <h2>Home Screen Preview</h2>
+      <div class="phone-grid">
+        <!-- Option 1 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#1a1a2e"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#374151"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#f97316"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#f97316" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#f97316"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#f97316" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#22c55e" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 1</div>
+          </div>
+        </div>
+        <!-- Option 2 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#0f172a"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#374151"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#06b6d4"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#06b6d4" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#06b6d4"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#06b6d4" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#3b82f6" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 2</div>
+          </div>
+        </div>
+        <!-- Option 3 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#1c1917"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#44403c"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#eab308"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#eab308" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#eab308"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#eab308" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#ef4444" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 3</div>
+          </div>
+        </div>
+        <!-- Option 4 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#1e1b4b"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#4c1d95"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#ec4899"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#ec4899" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#ec4899"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#ec4899" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#a855f7" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 4</div>
+          </div>
+        </div>
+        <!-- Option 5 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#042f2e"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#115e59"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#84cc16"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#84cc16" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#84cc16"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#84cc16" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#14b8a6" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 5</div>
+          </div>
+        </div>
+        <!-- Option 6 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#18181b"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#3f3f46"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#a1a1aa"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#a1a1aa" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#a1a1aa"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#a1a1aa" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#ffffff" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 6</div>
+          </div>
+        </div>
+        <!-- Option 7 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#431407"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#78350f"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#fbbf24"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#fbbf24" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#fbbf24"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#fbbf24" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#f97316" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 7</div>
+          </div>
+        </div>
+        <!-- Option 8 -->
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <svg class="mini-app-icon" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="96" fill="#1f1315"/>
+              <rect x="80" y="244" width="352" height="24" rx="12" fill="#4a1c2a"/>
+              <rect x="60" y="180" width="40" height="152" rx="8" fill="#fb7185"/>
+              <rect x="108" y="200" width="28" height="112" rx="6" fill="#fb7185" opacity="0.8"/>
+              <rect x="412" y="180" width="40" height="152" rx="8" fill="#fb7185"/>
+              <rect x="376" y="200" width="28" height="112" rx="6" fill="#fb7185" opacity="0.8"/>
+              <text x="256" y="295" font-family="Arial Black" font-size="160" font-weight="900" fill="#f43f5e" text-anchor="middle">R</text>
+            </svg>
+            <div class="mini-app-label">Option 8</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="color:#64748b; text-align:center; margin-top:32px; font-size:14px;">
+      Tell me the option number you like (1-8) and I'll update the app with those colors!
+    </p>
+  </div>
+</body>
+</html>

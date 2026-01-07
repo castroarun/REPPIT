@@ -1,0 +1,5 @@
+# Ignore Capacitor Android folder
+android/
+
+# Ignore iOS folder if added later
+ios/
