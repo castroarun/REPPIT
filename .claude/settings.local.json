@@ -39,7 +39,15 @@
       "Bash(npm run:*)",
       "Bash(vercel --version:*)",
       "Bash(git tag:*)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh repo edit:*)",
+      "Bash(cat:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git grep:*)",
+      "Bash(xargs -I {} git grep -l \"GOCSPX\\\\|\\\\.apps\\\\.googleusercontent\\\\.com\" {})",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
