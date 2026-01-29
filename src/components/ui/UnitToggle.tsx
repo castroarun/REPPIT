@@ -8,7 +8,7 @@ export default function UnitToggle() {
   return (
     <button
       onClick={toggleUnit}
-      className="px-2 py-1 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 transition-colors"
+      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors border border-gray-300 dark:border-gray-500"
       aria-label={`Switch to ${unit === 'kg' ? 'lbs' : 'kg'}`}
       title={`Switch to ${unit === 'kg' ? 'lbs' : 'kg'}`}
     >

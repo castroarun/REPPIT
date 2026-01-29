@@ -3,13 +3,15 @@
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react'
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase/client'
+import { pushAllToCloud } from '@/lib/storage/sync'
 
 interface AuthContextType {
   user: User | null
   session: Session | null
   isLoading: boolean
   isConfigured: boolean
-  signInWithGoogle: () => Promise<{ error: AuthError | null }>
+  sendOtpCode: (email: string) => Promise<{ error: AuthError | null }>
+  verifyOtpCode: (email: string, token: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
   deleteAccount: () => Promise<{ error: Error | null }>
 }
@@ -20,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const isConfigured = isSupabaseConfigured()
+  const isConfigured = isSupabaseConfigured() && process.env.NEXT_PUBLIC_AUTH_ENABLED !== 'false'
 
   useEffect(() => {
     if (!isConfigured) {
@@ -28,14 +30,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
 
+    // Helper to ensure user record exists
+    const checkAndCreateUserRecord = async (authUser: User | null) => {
+      if (!authUser) return
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const client = supabase as any
+        const { data: existingUser } = await client
+          .from('users')
+          .select('id')
+          .eq('id', authUser.id)
+          .single()
+
+        if (!existingUser) {
+          await client
+            .from('users')
+            .insert({
+              id: authUser.id,
+              email: authUser.email,
+              created_at: authUser.created_at
+            })
+        }
+      } catch {
+        // Ignore errors
+      }
+    }
+
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
       setIsLoading(false)
+      // Ensure user record exists for existing sessions
+      await checkAndCreateUserRecord(session?.user ?? null)
+      // Auto-sync all local data if user is logged in
+      if (session?.user) {
+        pushAllToCloud().then(result => {
+          if (result.profiles > 0 || result.workouts > 0) {
+            console.log(`Auto-sync on load: ${result.profiles} profiles, ${result.workouts} workouts`)
+          }
+        }).catch(err => {
+          console.error('Auto-sync on load failed:', err)
+        })
+      }
     })
 
-    // Listen for auth changes
+    // Listen for auth changes (handles magic link token exchange)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session)
@@ -49,26 +89,79 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [isConfigured])
 
-  const signInWithGoogle = useCallback(async () => {
+  // Send OTP code to email (no redirect - code is entered directly in app)
+  const sendOtpCode = useCallback(async (email: string) => {
     if (!isConfigured) {
       return { error: new Error('Supabase not configured') as AuthError }
     }
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
       options: {
-        redirectTo: typeof window !== 'undefined'
-          ? `${window.location.origin}/auth/callback`
-          : undefined,
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent'
-        }
+        shouldCreateUser: true
       }
     })
 
     return { error }
   }, [isConfigured])
+
+  // Ensure user record exists in public.users table (backup for trigger)
+  const ensureUserRecord = useCallback(async (authUser: User) => {
+    if (!isConfigured) return
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const client = supabase as any
+      // Check if user exists in public.users
+      const { data: existingUser } = await client
+        .from('users')
+        .select('id')
+        .eq('id', authUser.id)
+        .single()
+
+      // If not exists, create the record
+      if (!existingUser) {
+        await client
+          .from('users')
+          .insert({
+            id: authUser.id,
+            email: authUser.email,
+            created_at: authUser.created_at
+          })
+      }
+    } catch {
+      // Ignore errors - trigger should handle this, this is just a fallback
+    }
+  }, [isConfigured])
+
+  // Verify the OTP code entered by user
+  const verifyOtpCode = useCallback(async (email: string, token: string) => {
+    if (!isConfigured) {
+      return { error: new Error('Supabase not configured') as AuthError }
+    }
+
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'email'
+    })
+
+    // If successful, ensure user record exists and sync all local data
+    if (!error && data.user) {
+      await ensureUserRecord(data.user)
+      // Auto-sync all local data to cloud on successful login
+      pushAllToCloud().then(result => {
+        console.log(`Auto-sync complete: ${result.profiles} profiles, ${result.workouts} workouts`)
+        if (result.errors.length > 0) {
+          console.warn('Sync errors:', result.errors)
+        }
+      }).catch(err => {
+        console.error('Auto-sync failed:', err)
+      })
+    }
+
+    return { error }
+  }, [isConfigured, ensureUserRecord])
 
   const signOut = useCallback(async () => {
     if (!isConfigured) return
@@ -108,7 +201,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       isLoading,
       isConfigured,
-      signInWithGoogle,
+      sendOtpCode,
+      verifyOtpCode,
       signOut,
       deleteAccount
     }}>

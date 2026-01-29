@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { Logo } from '@/components/ui'
 
@@ -8,22 +8,273 @@ interface LoginScreenProps {
   onSkip?: () => void
 }
 
+const EMAIL_DOMAINS = ['@gmail.com', '@yahoo.com', '@outlook.com', '@icloud.com', '@hotmail.com']
+
 export function LoginScreen({ onSkip }: LoginScreenProps) {
-  const { signInWithGoogle, isConfigured } = useAuth()
+  const { sendOtpCode, verifyOtpCode, isConfigured } = useAuth()
+  const [email, setEmail] = useState('')
+  const [otpCode, setOtpCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [resendSuccess, setResendSuccess] = useState(false)
+  const [codeSent, setCodeSent] = useState(false)
+  const formRef = useRef<HTMLFormElement>(null)
+  const hasAutoSubmitted = useRef(false)
 
-  const handleGoogleSignIn = async () => {
+  // Show domain suggestions when user has typed something but no @ yet
+  const showDomainSuggestions = email.length > 0 && !email.includes('@')
+
+  const handleDomainSelect = (domain: string) => {
+    setEmail(email + domain)
+  }
+
+  const handleSendCode = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!email.trim()) {
+      setError('Please enter your email address')
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
-    const { error } = await signInWithGoogle()
+    const { error } = await sendOtpCode(email)
+
+    setIsLoading(false)
 
     if (error) {
       setError(error.message)
-      setIsLoading(false)
+    } else {
+      setCodeSent(true)
     }
-    // On success, user will be redirected by OAuth flow
+  }
+
+  const handleVerifyCode = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const code = otpCode.replace(/\s/g, '')
+
+    if (code.length !== 6) {
+      setError('Please enter the 6-digit code')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    const { error } = await verifyOtpCode(email, code)
+
+    setIsLoading(false)
+
+    if (error) {
+      // Make error messages more user-friendly
+      if (error.message.includes('expired') || error.message.includes('invalid')) {
+        setError('Code expired or invalid. Please request a new code.')
+      } else {
+        setError(error.message)
+      }
+      setOtpCode('') // Clear the invalid code
+    }
+    // Success - AuthContext will update and redirect automatically
+  }
+
+  const handleResend = async () => {
+    setIsLoading(true)
+    setError(null)
+    setResendSuccess(false)
+
+    const { error } = await sendOtpCode(email)
+
+    setIsLoading(false)
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setResendSuccess(true)
+      // Clear success message after 3 seconds
+      setTimeout(() => setResendSuccess(false), 3000)
+    }
+  }
+
+  const handleChangeEmail = () => {
+    setCodeSent(false)
+    setOtpCode('')
+    setError(null)
+    hasAutoSubmitted.current = false
+  }
+
+  // Auto-verify when 6 digits entered
+  const autoVerify = useCallback(async (code: string) => {
+    if (code.length !== 6 || isLoading || hasAutoSubmitted.current) return
+
+    hasAutoSubmitted.current = true
+    setIsLoading(true)
+    setError(null)
+
+    const { error } = await verifyOtpCode(email, code)
+
+    setIsLoading(false)
+
+    if (error) {
+      // Make error messages more user-friendly
+      if (error.message.includes('expired') || error.message.includes('invalid')) {
+        setError('Code expired or invalid. Please request a new code.')
+      } else {
+        setError(error.message)
+      }
+      hasAutoSubmitted.current = false // Allow retry
+      setOtpCode('') // Clear the invalid code
+    }
+  }, [email, isLoading, verifyOtpCode])
+
+  // Auto-submit when OTP is complete
+  useEffect(() => {
+    if (codeSent && otpCode.length === 6 && !hasAutoSubmitted.current) {
+      autoVerify(otpCode)
+    }
+  }, [otpCode, codeSent, autoVerify])
+
+  // Try WebOTP API for auto-detection (works with SMS on supported browsers)
+  useEffect(() => {
+    if (!codeSent) return
+
+    const abortController = new AbortController()
+
+    // Check if WebOTP API is available
+    if ('OTPCredential' in window) {
+      navigator.credentials.get({
+        // @ts-expect-error - WebOTP API types not fully supported
+        otp: { transport: ['sms'] },
+        signal: abortController.signal
+      }).then((credential) => {
+        // @ts-expect-error - WebOTP credential type
+        if (credential?.code) {
+          // @ts-expect-error - WebOTP credential type
+          setOtpCode(credential.code)
+        }
+      }).catch(() => {
+        // WebOTP not available or user denied - ignore
+      })
+    }
+
+    return () => abortController.abort()
+  }, [codeSent])
+
+  // OTP code entry screen
+  if (codeSent) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-b from-[#2C3E50] to-[#1a252f]">
+        <div className="mb-8">
+          <Logo size="lg" showText={false} />
+        </div>
+
+        {/* Email Icon */}
+        <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6">
+          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+
+        <h2 className="text-2xl font-bold text-white mb-3">Enter verification code</h2>
+
+        <p className="text-gray-300 text-center mb-2 max-w-xs">
+          We sent a 6-digit code to
+        </p>
+        <p className="text-white font-medium mb-6">{email}</p>
+
+        <form onSubmit={handleVerifyCode} className="w-full max-w-xs space-y-4">
+          <div className="relative">
+            <input
+              type="text"
+              inputMode="numeric"
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+              placeholder="000000"
+              maxLength={6}
+              disabled={isLoading}
+              autoFocus
+              autoComplete="one-time-code"
+              className="w-full px-4 py-4 rounded-lg bg-white/10 border border-white/20 text-white text-center text-2xl font-mono tracking-[0.3em] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50"
+            />
+            {/* Paste from clipboard button */}
+            {otpCode.length < 6 && (
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const text = await navigator.clipboard.readText()
+                    const digits = text.replace(/[^0-9]/g, '').slice(0, 6)
+                    if (digits.length > 0) {
+                      setOtpCode(digits)
+                    }
+                  } catch {
+                    // Clipboard access denied - ignore
+                  }
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-xs rounded bg-white/10 hover:bg-white/20 text-gray-400 hover:text-white transition-colors"
+              >
+                Paste
+              </button>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading || otpCode.length !== 6}
+            className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Verifying...
+              </>
+            ) : (
+              'Verify & Sign In'
+            )}
+          </button>
+        </form>
+
+        {error && (
+          <p className="mt-4 text-red-400 text-sm text-center max-w-xs">{error}</p>
+        )}
+
+        {resendSuccess && (
+          <p className="mt-4 text-green-400 text-sm text-center max-w-xs">New code sent! Check your email.</p>
+        )}
+
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <button
+            onClick={handleResend}
+            disabled={isLoading}
+            className="text-gray-400 hover:text-white text-sm transition-colors disabled:opacity-50"
+          >
+            Resend code
+          </button>
+          <button
+            onClick={handleChangeEmail}
+            className="text-gray-400 hover:text-white text-sm underline transition-colors"
+          >
+            Use a different email
+          </button>
+        </div>
+
+        {onSkip && (
+          <button
+            onClick={onSkip}
+            className="mt-4 text-gray-500 hover:text-gray-300 text-xs transition-colors"
+          >
+            Continue without account
+          </button>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -64,40 +315,62 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
         </div>
       </div>
 
-      {/* Sign In Button */}
+      {/* Sign In Form */}
       {isConfigured ? (
-        <button
-          onClick={handleGoogleSignIn}
-          disabled={isLoading}
-          className="w-full max-w-xs flex items-center justify-center gap-3 bg-white text-gray-800 font-medium py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? (
-            <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <>
-              {/* Google Icon */}
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              Continue with Google
-            </>
-          )}
-        </button>
+        <form onSubmit={handleSendCode} className="w-full max-w-xs space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="email" className="sr-only">Email address</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              disabled={isLoading}
+              autoComplete="email"
+              autoFocus
+              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50"
+            />
+
+            {/* Domain quick-select buttons */}
+            {showDomainSuggestions && (
+              <div className="flex flex-wrap gap-1.5">
+                {EMAIL_DOMAINS.map(domain => (
+                  <button
+                    key={domain}
+                    type="button"
+                    onClick={() => handleDomainSelect(domain)}
+                    disabled={isLoading}
+                    className="px-2.5 py-1 text-xs rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10 transition-colors disabled:opacity-50"
+                  >
+                    {domain}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Send Sign-In Code
+              </>
+            )}
+          </button>
+
+          <p className="text-gray-500 text-xs text-center">
+            No password needed. We&apos;ll email you a 6-digit code.
+          </p>
+        </form>
       ) : (
         <div className="w-full max-w-xs text-center text-amber-400 text-sm bg-amber-400/10 p-3 rounded-lg">
           Cloud sync not configured. Using local storage only.

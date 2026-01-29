@@ -113,36 +113,54 @@ function calculateSuggestions(sessions: WorkoutSession[], numSets: number): Sugg
     const recentSet = mostRecent.sets[i]
     const hasRecentData = recentSet?.weight && recentSet?.reps
 
+    let suggestion: Suggestion
+
     if (hasRecentData) {
       // Use the most recent data directly
-      suggestions.push(calculateFromSet(recentSet))
+      suggestion = calculateFromSet(recentSet)
     } else {
       // Recent session is incomplete for this set - look for earlier data
       const earlierSet = getBestSetData(i)
 
       if (earlierSet) {
         // Calculate suggestion from earlier session
-        suggestions.push(calculateFromSet(earlierSet))
+        suggestion = calculateFromSet(earlierSet)
       } else if (i > 0 && suggestions[i - 1]) {
         // No historical data - derive from previous set's suggestion
         // Pyramid: weight +5, reps -2
         const prevSuggestion = suggestions[i - 1]
-        suggestions.push({
+        suggestion = {
           weight: prevSuggestion.weight + 5,
           reps: Math.max(4, prevSuggestion.reps - 2)
-        })
+        }
       } else {
         // Fallback to S1 data with pyramid progression
         const baseWeight = s1.weight!
         const baseReps = s1.reps!
         const setOffset = i * 5
         const repsOffset = i * 2
-        suggestions.push({
+        suggestion = {
           weight: shouldProgress ? baseWeight + 5 + setOffset : baseWeight + setOffset,
           reps: Math.max(4, shouldProgress ? baseReps - 2 - repsOffset : baseReps - repsOffset)
-        })
+        }
       }
     }
+
+    // FATIGUE PRINCIPLE: Later sets at the same weight can't have more reps than earlier sets
+    // This ensures we don't suggest 84.5×8 for Set 3 when Set 2 is 84.5×7
+    if (i > 0) {
+      const prevSuggestion = suggestions[i - 1]
+      // If same weight, reps should be equal or less than previous set
+      if (suggestion.weight === prevSuggestion.weight && suggestion.reps > prevSuggestion.reps) {
+        suggestion.reps = Math.max(4, prevSuggestion.reps - 1) // Decrease by 1 rep due to fatigue
+      }
+      // If lighter weight, still shouldn't exceed previous set's reps much (fatigue carries over)
+      else if (suggestion.weight < prevSuggestion.weight && suggestion.reps > prevSuggestion.reps + 2) {
+        suggestion.reps = prevSuggestion.reps + 2 // Allow max +2 reps for lighter weight
+      }
+    }
+
+    suggestions.push(suggestion)
   }
 
   return suggestions
@@ -158,6 +176,10 @@ export default function WorkoutLogger({ profileId, exerciseId, onLevelUp, onRequ
     // Initialize with default sets from settings
     const settings = getTimerSettings()
     return createEmptySets(settings.defaultSets)
+  })
+  const [showTargetSuggestions, setShowTargetSuggestions] = useState(() => {
+    const settings = getTimerSettings()
+    return settings.showTargetSuggestions ?? true
   })
   const [isLoaded, setIsLoaded] = useState(false)
   const [celebration, setCelebration] = useState<CelebrationState>({ show: false, message: '' })
@@ -941,8 +963,8 @@ export default function WorkoutLogger({ profileId, exerciseId, onLevelUp, onRequ
           })}
         </div>
 
-        {/* Chevron buttons column - copy from target (only for sets with suggestions) */}
-        {suggestions && (
+        {/* Chevron buttons column - copy from target (only for sets with suggestions and when enabled) */}
+        {showTargetSuggestions && suggestions && (
           <div className="flex flex-col gap-1.5 flex-shrink-0">
             {/* Header placeholder - matches other column headers exactly */}
             <div className="text-center py-1.5">
@@ -969,8 +991,8 @@ export default function WorkoutLogger({ profileId, exerciseId, onLevelUp, onRequ
           </div>
         )}
 
-        {/* TARGET column (RIGHT side - only for sets with suggestions) */}
-        {suggestions && (
+        {/* TARGET column (RIGHT side - only for sets with suggestions and when enabled) */}
+        {showTargetSuggestions && suggestions && (
           <div className="flex flex-col gap-1.5 flex-shrink-0 min-w-[75px]">
             <div className="text-center py-1.5">
               <span className="text-[11px] text-green-600 dark:text-green-400 font-bold uppercase tracking-wider">🎯 Target</span>

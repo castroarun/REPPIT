@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/contexts'
 import { Button, ThemeToggle, UnitToggle } from '@/components/ui'
-import { getPendingSyncCount, processSyncQueue } from '@/lib/storage/sync'
+import { getPendingSyncCount, processSyncQueue, pushAllToCloud } from '@/lib/storage/sync'
 import { getLastSyncTime } from '@/lib/storage/profiles'
 import {
   requestNotificationPermission,
@@ -19,14 +19,21 @@ import { GesturesOnboarding, resetAllTips } from '@/components/onboarding'
 import { areTipsEnabled, enableTips, disableTips, resetOnboarding } from '@/lib/storage/onboarding'
 import { getSelectedRoutine } from '@/lib/storage/routines'
 
+const EMAIL_DOMAINS = ['@gmail.com', '@yahoo.com', '@outlook.com', '@icloud.com', '@hotmail.com']
+
 export default function SettingsPage() {
   const router = useRouter()
-  const { user, isConfigured, signInWithGoogle, signOut, deleteAccount } = useAuth()
+  const { user, isConfigured, sendOtpCode, verifyOtpCode, signOut, deleteAccount } = useAuth()
   const [isSigningIn, setIsSigningIn] = useState(false)
+  const [signInEmail, setSignInEmail] = useState('')
+  const [codeSent, setCodeSent] = useState(false)
+  const [otpCode, setOtpCode] = useState('')
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
+  const [isPushingAll, setIsPushingAll] = useState(false)
+  const [pushResult, setPushResult] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default')
   const [isRequestingNotifications, setIsRequestingNotifications] = useState(false)
@@ -35,10 +42,43 @@ export default function SettingsPage() {
   const [showDevMode, setShowDevMode] = useState(false)
   const [defaultSets, setDefaultSets] = useState(DEFAULT_TIMER_SETTINGS.defaultSets)
   const [defaultDuration, setDefaultDuration] = useState(DEFAULT_TIMER_SETTINGS.defaultDuration)
+  const [showTargetSuggestions, setShowTargetSuggestions] = useState(DEFAULT_TIMER_SETTINGS.showTargetSuggestions)
   const [showGesturesGuide, setShowGesturesGuide] = useState(false)
   const [currentProfileId, setCurrentProfileId] = useState<string | null>(null)
   const [tipsEnabled, setTipsEnabled] = useState(true)
   const [activeRoutineName, setActiveRoutineName] = useState<string | null>(null)
+  const hasAutoSubmitted = useRef(false)
+
+  // Show domain suggestions when user has typed something but no @ yet
+  const showDomainSuggestions = signInEmail.length > 0 && !signInEmail.includes('@')
+
+  const handleDomainSelect = (domain: string) => {
+    setSignInEmail(signInEmail + domain)
+  }
+
+  // Auto-verify OTP when 6 digits entered
+  const autoVerifyOtp = useCallback(async (code: string) => {
+    if (code.length !== 6 || isSigningIn || hasAutoSubmitted.current) return
+
+    hasAutoSubmitted.current = true
+    setIsSigningIn(true)
+    setError(null)
+
+    const { error } = await verifyOtpCode(signInEmail, code)
+    setIsSigningIn(false)
+
+    if (error) {
+      setError(error.message)
+      hasAutoSubmitted.current = false
+    }
+  }, [signInEmail, isSigningIn, verifyOtpCode])
+
+  // Auto-submit when OTP is complete
+  useEffect(() => {
+    if (codeSent && otpCode.length === 6 && !hasAutoSubmitted.current) {
+      autoVerifyOtp(otpCode)
+    }
+  }, [otpCode, codeSent, autoVerifyOtp])
 
   useEffect(() => {
     setNotificationStatus(getNotificationPermission())
@@ -50,6 +90,7 @@ export default function SettingsPage() {
     const timerSettings = getTimerSettings()
     setDefaultSets(timerSettings.defaultSets)
     setDefaultDuration(timerSettings.defaultDuration)
+    setShowTargetSuggestions(timerSettings.showTargetSuggestions ?? true)
     // Get last visited profile for linking to Training Program
     const lastProfileId = localStorage.getItem('lastVisitedProfile')
     setCurrentProfileId(lastProfileId)
@@ -94,15 +135,64 @@ export default function SettingsPage() {
   const pendingCount = getPendingSyncCount()
   const lastSync = getLastSyncTime()
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!signInEmail.trim()) {
+      setError('Please enter your email address')
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(signInEmail)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
     setIsSigningIn(true)
     setError(null)
 
-    const { error } = await signInWithGoogle()
+    const { error } = await sendOtpCode(signInEmail)
+    setIsSigningIn(false)
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setCodeSent(true)
+    }
+  }
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const code = otpCode.replace(/\s/g, '')
+    if (code.length !== 6) {
+      setError('Please enter the 6-digit code')
+      return
+    }
+
+    setIsSigningIn(true)
+    setError(null)
+
+    const { error } = await verifyOtpCode(signInEmail, code)
+    setIsSigningIn(false)
+
     if (error) {
       setError(error.message)
     }
+    // Success - AuthContext will update automatically
+  }
+
+  const handleResendCode = async () => {
+    setIsSigningIn(true)
+    setError(null)
+
+    const { error } = await sendOtpCode(signInEmail)
     setIsSigningIn(false)
+
+    if (error) {
+      setError(error.message)
+    }
   }
 
   const handleSignOut = async () => {
@@ -135,6 +225,26 @@ export default function SettingsPage() {
     setIsSyncing(false)
   }
 
+  const handlePushAllData = async () => {
+    setIsPushingAll(true)
+    setPushResult(null)
+    try {
+      const result = await pushAllToCloud()
+      if (result.errors.length > 0) {
+        console.error('Push errors:', result.errors)
+        setPushResult(`Synced ${result.profiles} profiles, ${result.workouts} workouts (${result.errors.length} errors)`)
+      } else {
+        setPushResult(`Synced ${result.profiles} profiles, ${result.workouts} workouts`)
+      }
+      // Clear result after 5 seconds
+      setTimeout(() => setPushResult(null), 5000)
+    } catch (err) {
+      console.error('Push all failed:', err)
+      setPushResult('Sync failed')
+    }
+    setIsPushingAll(false)
+  }
+
   const handleLoadSampleData = () => {
     loadSampleData()
     setHasSamples(true)
@@ -156,6 +266,12 @@ export default function SettingsPage() {
     saveTimerSettings({ defaultDuration: duration })
     // Clear per-exercise timer history so the new default applies everywhere
     resetTimerHistory()
+  }
+
+  const handleToggleTargetSuggestions = () => {
+    const newValue = !showTargetSuggestions
+    setShowTargetSuggestions(newValue)
+    saveTimerSettings({ showTargetSuggestions: newValue })
   }
 
   const formatLastSync = (timestamp: string | null) => {
@@ -218,27 +334,55 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Sync Status */}
-                <div className="flex items-center justify-between py-2 border-t border-gray-100 dark:border-gray-700">
-                  <div>
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                      Sync Status
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Last sync: {formatLastSync(lastSync)}
-                      {pendingCount > 0 && (
-                        <span className="text-amber-500 ml-2">
-                          • {pendingCount} pending
-                        </span>
-                      )}
-                    </p>
+                <div className="py-2 border-t border-gray-100 dark:border-gray-700 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Sync Status
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Last sync: {formatLastSync(lastSync)}
+                        {pendingCount > 0 && (
+                          <span className="text-amber-500 ml-2">
+                            • {pendingCount} pending
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleManualSync}
+                      disabled={isSyncing || pendingCount === 0}
+                      className="text-sm text-blue-500 hover:text-blue-600 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    >
+                      {isSyncing ? 'Syncing...' : 'Sync Now'}
+                    </button>
                   </div>
-                  <button
-                    onClick={handleManualSync}
-                    disabled={isSyncing || pendingCount === 0}
-                    className="text-sm text-blue-500 hover:text-blue-600 disabled:text-gray-400 disabled:cursor-not-allowed"
-                  >
-                    {isSyncing ? 'Syncing...' : 'Sync Now'}
-                  </button>
+
+                  {/* Push All Data Button */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Backup All Data
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Push all local data to cloud
+                      </p>
+                    </div>
+                    <button
+                      onClick={handlePushAllData}
+                      disabled={isPushingAll}
+                      className="text-sm text-green-500 hover:text-green-600 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    >
+                      {isPushingAll ? 'Uploading...' : 'Upload All'}
+                    </button>
+                  </div>
+
+                  {/* Push Result */}
+                  {pushResult && (
+                    <p className={`text-xs text-center ${pushResult.includes('error') || pushResult.includes('failed') ? 'text-amber-500' : 'text-green-500'}`}>
+                      {pushResult}
+                    </p>
+                  )}
                 </div>
 
                 {/* Sign Out */}
@@ -252,35 +396,144 @@ export default function SettingsPage() {
                 </Button>
               </div>
             ) : isConfigured ? (
-              <div className="space-y-4">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Sign in to sync your data across all your devices.
-                </p>
-                <button
-                  onClick={handleSignIn}
-                  disabled={isSigningIn}
-                  className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium py-3 px-6 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
-                >
-                  {isSigningIn ? (
-                    <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                      </svg>
-                      Sign in with Google
-                    </>
-                  )}
-                </button>
-                {pendingCount > 0 && (
-                  <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
-                    {pendingCount} changes waiting to sync
+              codeSent ? (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
+                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-medium text-gray-700 dark:text-gray-200">Enter verification code</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      We sent a 6-digit code to <span className="font-medium">{signInEmail}</span>
+                    </p>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+                      placeholder="000000"
+                      maxLength={6}
+                      disabled={isSigningIn}
+                      autoComplete="one-time-code"
+                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white text-center text-xl font-mono tracking-[0.3em] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                    />
+                    {/* Paste from clipboard button */}
+                    {otpCode.length < 6 && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            const text = await navigator.clipboard.readText()
+                            const digits = text.replace(/[^0-9]/g, '').slice(0, 6)
+                            if (digits.length > 0) {
+                              setOtpCode(digits)
+                            }
+                          } catch {
+                            // Clipboard access denied - ignore
+                          }
+                        }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-600 dark:text-gray-300 transition-colors"
+                      >
+                        Paste
+                      </button>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSigningIn || otpCode.length !== 6}
+                    className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {isSigningIn ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      'Verify & Sign In'
+                    )}
+                  </button>
+                  <div className="flex justify-center gap-4">
+                    <button
+                      type="button"
+                      onClick={handleResendCode}
+                      disabled={isSigningIn}
+                      className="text-sm text-blue-500 hover:text-blue-600 disabled:opacity-50"
+                    >
+                      Resend code
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCodeSent(false)
+                        setOtpCode('')
+                        setSignInEmail('')
+                      }}
+                      className="text-sm text-gray-500 hover:text-gray-600"
+                    >
+                      Change email
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Sign in to sync your data across all your devices.
                   </p>
-                )}
-              </div>
+                  <div className="space-y-2">
+                    <input
+                      type="email"
+                      value={signInEmail}
+                      onChange={(e) => setSignInEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      disabled={isSigningIn}
+                      autoComplete="email"
+                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                    />
+
+                    {/* Domain quick-select buttons */}
+                    {showDomainSuggestions && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {EMAIL_DOMAINS.map(domain => (
+                          <button
+                            key={domain}
+                            type="button"
+                            onClick={() => handleDomainSelect(domain)}
+                            disabled={isSigningIn}
+                            className="px-2.5 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-500 transition-colors disabled:opacity-50"
+                          >
+                            {domain}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSigningIn}
+                    className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {isSigningIn ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Send Sign-In Code
+                      </>
+                    )}
+                  </button>
+                  <p className="text-xs text-gray-400 text-center">
+                    No password needed - we&apos;ll email you a 6-digit code
+                  </p>
+                  {pendingCount > 0 && (
+                    <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
+                      {pendingCount} changes waiting to sync
+                    </p>
+                  )}
+                </form>
+              )
             ) : (
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Cloud sync is not configured. Your data is stored locally on this device.
@@ -417,6 +670,26 @@ export default function SettingsPage() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Target Suggestions Toggle */}
+            <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-4">
+              <div>
+                <p className="font-medium text-gray-700 dark:text-gray-200">Target Suggestions</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Show recommended reps/weight based on history</p>
+              </div>
+              <button
+                onClick={handleToggleTargetSuggestions}
+                className={`relative w-12 h-6 rounded-full transition-colors ${
+                  showTargetSuggestions ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+                }`}
+              >
+                <span
+                  className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                    showTargetSuggestions ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                />
+              </button>
             </div>
 
             {/* Training Program */}

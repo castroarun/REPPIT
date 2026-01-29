@@ -271,6 +271,7 @@ export interface TimerSettings {
   keepAwakeDuringWorkout: boolean  // Keep screen awake during workout session
   defaultSets: number          // Default number of sets per exercise (default: 3)
   warningTime: number          // Seconds remaining to trigger warning (0 to disable)
+  showTargetSuggestions: boolean  // Show target suggestions in workout logger
 }
 
 export interface ExerciseTimerHistory {
@@ -332,5 +333,6 @@ export const DEFAULT_TIMER_SETTINGS: TimerSettings = {
   autoStart: true,
   keepAwakeDuringWorkout: true,  // Default to keeping screen awake
   defaultSets: 3,                // Default 3 sets per exercise
-  warningTime: 30                // Default 30-second warning
+  warningTime: 30,               // Default 30-second warning
+  showTargetSuggestions: true    // Show target suggestions by default
 }

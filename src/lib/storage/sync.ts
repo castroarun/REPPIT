@@ -414,3 +414,125 @@ export function getPendingSyncCount(): number {
 export function hasPendingSync(): boolean {
   return getSyncQueue().length > 0
 }
+
+// ============ Push All Local Data to Cloud ============
+
+/**
+ * Push all local profiles and workouts to the cloud
+ * Use this for first-time sync of existing local data
+ */
+export async function pushAllToCloud(): Promise<{ profiles: number; workouts: number; errors: string[] }> {
+  if (!isSupabaseConfigured()) {
+    return { profiles: 0, workouts: 0, errors: ['Supabase not configured'] }
+  }
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { profiles: 0, workouts: 0, errors: ['Not authenticated'] }
+  }
+
+  const errors: string[] = []
+  let profilesCount = 0
+  let workoutsCount = 0
+
+  // Get all local profiles
+  const PROFILES_KEY = 'strength_profiles_v2'
+  const WORKOUTS_KEY = 'strength_workouts_v2'
+
+  try {
+    const profilesData = localStorage.getItem(PROFILES_KEY)
+    const profiles = profilesData ? JSON.parse(profilesData) : []
+
+    // Push each profile
+    for (const profile of profiles) {
+      try {
+        // Check if profile already exists in cloud
+        const existingCloudId = getCloudId(profile.id)
+
+        if (existingCloudId) {
+          // Update existing
+          const { error } = await db
+            .from('profiles')
+            .update({
+              name: profile.name,
+              age: profile.age,
+              height: profile.height,
+              weight: profile.weight,
+              sex: profile.sex,
+              daily_steps: profile.dailySteps,
+              activity_level: profile.activityLevel,
+              goal: profile.goal,
+              exercise_ratings: profile.exerciseRatings,
+              updated_at: profile.updatedAt
+            })
+            .eq('id', existingCloudId)
+
+          if (error) throw error
+        } else {
+          // Create new
+          const { data, error } = await db
+            .from('profiles')
+            .insert({
+              user_id: user.id,
+              local_id: profile.id,
+              name: profile.name,
+              age: profile.age,
+              height: profile.height,
+              weight: profile.weight,
+              sex: profile.sex,
+              daily_steps: profile.dailySteps,
+              activity_level: profile.activityLevel,
+              goal: profile.goal,
+              exercise_ratings: profile.exerciseRatings,
+              created_at: profile.createdAt,
+              updated_at: profile.updatedAt
+            })
+            .select('id')
+            .single()
+
+          if (error) throw error
+          if (data) {
+            mapLocalToCloudId(profile.id, data.id)
+          }
+        }
+        profilesCount++
+      } catch (err) {
+        errors.push(`Profile ${profile.name}: ${err}`)
+      }
+    }
+
+    // Push all workouts
+    const workoutsData = localStorage.getItem(WORKOUTS_KEY)
+    const workouts = workoutsData ? JSON.parse(workoutsData) : []
+
+    for (const workout of workouts) {
+      try {
+        const cloudProfileId = getCloudId(workout.profileId)
+        if (!cloudProfileId) {
+          errors.push(`Workout skipped: profile not synced (${workout.profileId})`)
+          continue
+        }
+
+        const { error } = await db
+          .from('workout_sessions')
+          .upsert({
+            profile_id: cloudProfileId,
+            exercise_id: workout.exerciseId,
+            date: workout.date,
+            sets: workout.sets
+          }, {
+            onConflict: 'profile_id,exercise_id,date'
+          })
+
+        if (error) throw error
+        workoutsCount++
+      } catch (err) {
+        errors.push(`Workout ${workout.exerciseId} (${workout.date}): ${err}`)
+      }
+    }
+  } catch (err) {
+    errors.push(`Failed to read local storage: ${err}`)
+  }
+
+  return { profiles: profilesCount, workouts: workoutsCount, errors }
+}

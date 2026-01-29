@@ -136,6 +136,36 @@ export interface Database {
           updated_at?: string
         }
       }
+      auth_transfer_codes: {
+        Row: {
+          id: string
+          code: string
+          access_token: string
+          refresh_token: string
+          user_id: string
+          created_at: string
+          expires_at: string
+          used: boolean
+        }
+        Insert: {
+          id?: string
+          code: string
+          access_token: string
+          refresh_token: string
+          user_id: string
+          created_at?: string
+          expires_at?: string
+          used?: boolean
+        }
+        Update: {
+          code?: string
+          access_token?: string
+          refresh_token?: string
+          user_id?: string
+          expires_at?: string
+          used?: boolean
+        }
+      }
     }
   }
 }

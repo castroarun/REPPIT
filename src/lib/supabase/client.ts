@@ -1,4 +1,5 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from './types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -8,11 +9,11 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 let supabaseClient: SupabaseClient<Database> | null = null
 
 if (supabaseUrl && supabaseAnonKey) {
-  supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  supabaseClient = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
+      detectSessionInUrl: true,
       persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
+      autoRefreshToken: true
     }
   })
 } else if (typeof window !== 'undefined') {
