@@ -17,19 +17,22 @@ export const DEFAULT_SELECTED_EXERCISES: Exercise[] = [
   'barbellRow',
   'pullUps',
   'latPulldown',
-  // Shoulders (3)
+  // Shoulders (4)
   'shoulderPressBarbell',
   'sideLateralDumbbell',
   'facePull',
-  // Legs (4)
+  'arnoldPress',
+  // Legs (5)
   'squat',
   'legPress',
   'romanianDeadlift',
   'calfRaise',
-  // Arms (3)
+  'legCurl',
+  // Arms (4)
   'bicepCurlBarbell',
   'tricepPushdown',
   'hammerCurl',
+  'ezBarCurl',
   // Core (1)
   'abCrunchMachine'
 ]
@@ -51,7 +54,8 @@ export interface WorkoutRoutine {
 
 /**
  * Predefined workout routines with comprehensive exercise coverage
- * Includes compound and isolation movements for each muscle group
+ * Principles: compounds first, isolations after, 6-8 exercises per session,
+ * proper muscle pairing, new exercises integrated where they fit
  */
 export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
   {
@@ -62,28 +66,28 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     isCustom: false,
     days: [
       {
-        name: 'Push A',
-        exercises: ['benchPress', 'shoulderPressBarbell', 'inclineBench', 'sideLateralDumbbell', 'tricepPushdown', 'facePull', 'pecDeck']
+        name: 'Push A (Chest focus)',
+        exercises: ['benchPress', 'inclineBench', 'shoulderPressBarbell', 'cableFly', 'sideLateralDumbbell', 'tricepPushdown', 'overheadTricepExtension']
       },
       {
-        name: 'Pull A',
-        exercises: ['barbellRow', 'pullUps', 'latPulldown', 'facePull', 'bicepCurlBarbell', 'hammerCurl', 'cableRow']
+        name: 'Pull A (Back focus)',
+        exercises: ['barbellRow', 'pullUps', 'latPulldown', 'facePull', 'bicepCurlBarbell', 'hammerCurl', 'barbellShrug']
       },
       {
-        name: 'Legs A',
-        exercises: ['squat', 'romanianDeadlift', 'legPress', 'legCurl', 'legExtension', 'calfRaise', 'abCrunchMachine']
+        name: 'Legs A (Quad focus)',
+        exercises: ['squat', 'legPress', 'legExtension', 'romanianDeadlift', 'legCurl', 'calfRaise', 'abCrunchMachine']
       },
       {
-        name: 'Push B',
-        exercises: ['shoulderPressBarbell', 'benchPress', 'dumbbellPress', 'sideLateralDumbbell', 'skullCrushers', 'overheadTricepExtension', 'cableFly']
+        name: 'Push B (Shoulder focus)',
+        exercises: ['shoulderPressDumbbell', 'dumbbellPress', 'arnoldPress', 'inclineDumbbellFly', 'sideLateralCable', 'skullCrushers', 'tricepKickback']
       },
       {
-        name: 'Pull B',
-        exercises: ['pullUps', 'barbellRow', 'cableRow', 'rearDeltFly', 'bicepCurlDumbbell', 'preacherCurl', 'dumbbellRow']
+        name: 'Pull B (Width focus)',
+        exercises: ['chinUps', 'pendlayRow', 'cableRow', 'rearDeltFly', 'ezBarCurl', 'concentrationCurl', 'dumbbellShrug']
       },
       {
-        name: 'Legs B',
-        exercises: ['deadlift', 'squat', 'hipThrust', 'legCurl', 'calfRaise', 'abCrunchCable', 'hackSquat']
+        name: 'Legs B (Posterior focus)',
+        exercises: ['deadlift', 'hipThrust', 'frontSquat', 'walkingLunge', 'legCurl', 'seatedCalfRaise', 'cableCrunchKneeling']
       }
     ]
   },
@@ -95,20 +99,20 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     isCustom: false,
     days: [
       {
-        name: 'Upper A',
-        exercises: ['benchPress', 'barbellRow', 'shoulderPressBarbell', 'pullUps', 'bicepCurlBarbell', 'tricepPushdown', 'facePull', 'sideLateralDumbbell']
+        name: 'Upper A (Strength)',
+        exercises: ['benchPress', 'barbellRow', 'shoulderPressBarbell', 'pullUps', 'bicepCurlBarbell', 'tricepPushdown', 'facePull']
       },
       {
-        name: 'Lower A',
-        exercises: ['squat', 'romanianDeadlift', 'legPress', 'legCurl', 'legExtension', 'calfRaise', 'abCrunchMachine']
+        name: 'Lower A (Strength)',
+        exercises: ['squat', 'romanianDeadlift', 'legPress', 'legCurl', 'calfRaise', 'abCrunchMachine']
       },
       {
-        name: 'Upper B',
-        exercises: ['inclineBench', 'pullUps', 'shoulderPressDumbbell', 'barbellRow', 'hammerCurl', 'skullCrushers', 'rearDeltFly', 'latPulldown']
+        name: 'Upper B (Hypertrophy)',
+        exercises: ['inclineBench', 'chinUps', 'arnoldPress', 'cableRow', 'ezBarCurl', 'skullCrushers', 'rearDeltFly']
       },
       {
-        name: 'Lower B',
-        exercises: ['deadlift', 'hipThrust', 'legPress', 'gobletSquat', 'legCurl', 'calfRaise', 'abCrunchCable']
+        name: 'Lower B (Hypertrophy)',
+        exercises: ['deadlift', 'hipThrust', 'frontSquat', 'walkingLunge', 'legExtension', 'seatedCalfRaise', 'cableCrunchKneeling']
       }
     ]
   },
@@ -121,23 +125,23 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     days: [
       {
         name: 'Chest',
-        exercises: ['benchPress', 'inclineBench', 'dumbbellPress', 'cableFly', 'chestPressMachine', 'pecDeck', 'declineBench']
+        exercises: ['benchPress', 'inclineBench', 'dumbbellPress', 'cableFly', 'inclineDumbbellFly', 'pecDeck', 'declineBench']
       },
       {
         name: 'Back',
-        exercises: ['deadlift', 'barbellRow', 'pullUps', 'latPulldown', 'cableRow', 'tBarRow', 'dumbbellRow', 'seatedRow']
+        exercises: ['deadlift', 'barbellRow', 'pullUps', 'latPulldown', 'cableRow', 'dumbbellRow', 'barbellShrug']
       },
       {
         name: 'Shoulders',
-        exercises: ['shoulderPressBarbell', 'sideLateralDumbbell', 'frontRaise', 'shoulderPressDumbbell', 'facePull', 'rearDeltFly', 'sideLateralCable', 'shoulderPressMachine']
+        exercises: ['shoulderPressBarbell', 'arnoldPress', 'sideLateralDumbbell', 'facePull', 'rearDeltFly', 'uprightRow', 'reversePecDeck']
       },
       {
         name: 'Arms',
-        exercises: ['bicepCurlBarbell', 'bicepCurlDumbbell', 'tricepPushdown', 'skullCrushers', 'hammerCurl', 'tricepDip', 'overheadTricepExtension', 'preacherCurl', 'cableCurl']
+        exercises: ['closeGripBenchPress', 'bicepCurlBarbell', 'tricepPushdown', 'ezBarCurl', 'skullCrushers', 'hammerCurl', 'overheadTricepExtension', 'concentrationCurl']
       },
       {
-        name: 'Legs',
-        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'legExtension', 'calfRaise', 'hipThrust', 'hackSquat', 'gobletSquat', 'bulgarianSplitSquat']
+        name: 'Legs & Core',
+        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'legExtension', 'hipThrust', 'calfRaise', 'abCrunchMachine']
       }
     ]
   },
@@ -150,15 +154,15 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     days: [
       {
         name: 'Day A',
-        exercises: ['squat', 'benchPress', 'barbellRow', 'shoulderPressBarbell', 'bicepCurlBarbell', 'tricepPushdown', 'legCurl', 'abCrunchMachine']
+        exercises: ['squat', 'benchPress', 'barbellRow', 'shoulderPressBarbell', 'bicepCurlBarbell', 'tricepPushdown', 'calfRaise', 'abCrunchMachine']
       },
       {
         name: 'Day B',
-        exercises: ['deadlift', 'inclineBench', 'pullUps', 'sideLateralDumbbell', 'hammerCurl', 'skullCrushers', 'legPress', 'calfRaise']
+        exercises: ['deadlift', 'inclineBench', 'chinUps', 'arnoldPress', 'hammerCurl', 'skullCrushers', 'legCurl', 'cableCrunchKneeling']
       },
       {
         name: 'Day C',
-        exercises: ['legPress', 'dumbbellPress', 'latPulldown', 'facePull', 'bicepCurlDumbbell', 'tricepDip', 'romanianDeadlift', 'abCrunchCable']
+        exercises: ['frontSquat', 'dumbbellPress', 'latPulldown', 'sideLateralDumbbell', 'ezBarCurl', 'overheadTricepExtension', 'romanianDeadlift', 'pallofPress']
       }
     ]
   },
@@ -171,15 +175,15 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     days: [
       {
         name: 'Chest & Biceps',
-        exercises: ['benchPress', 'inclineBench', 'cableFly', 'dumbbellPress', 'bicepCurlBarbell', 'bicepCurlDumbbell', 'hammerCurl', 'preacherCurl']
+        exercises: ['benchPress', 'inclineBench', 'dumbbellPress', 'cableFly', 'bicepCurlBarbell', 'ezBarCurl', 'hammerCurl']
       },
       {
         name: 'Back & Triceps',
-        exercises: ['deadlift', 'barbellRow', 'pullUps', 'latPulldown', 'tricepPushdown', 'skullCrushers', 'overheadTricepExtension', 'tricepDip']
+        exercises: ['deadlift', 'barbellRow', 'pullUps', 'latPulldown', 'tricepPushdown', 'skullCrushers', 'overheadTricepExtension']
       },
       {
         name: 'Legs & Shoulders',
-        exercises: ['squat', 'legPress', 'romanianDeadlift', 'calfRaise', 'shoulderPressBarbell', 'sideLateralDumbbell', 'facePull', 'legCurl', 'abCrunchMachine']
+        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'calfRaise', 'shoulderPressBarbell', 'sideLateralDumbbell', 'abCrunchMachine']
       }
     ]
   },
@@ -192,15 +196,15 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     days: [
       {
         name: 'Chest & Triceps',
-        exercises: ['benchPress', 'inclineBench', 'dumbbellPress', 'cableFly', 'tricepPushdown', 'skullCrushers', 'overheadTricepExtension', 'tricepDip']
+        exercises: ['benchPress', 'inclineBench', 'dumbbellPress', 'dumbbellFly', 'closeGripBenchPress', 'tricepPushdown', 'skullCrushers']
       },
       {
         name: 'Back & Biceps',
-        exercises: ['deadlift', 'barbellRow', 'pullUps', 'latPulldown', 'cableRow', 'bicepCurlBarbell', 'bicepCurlDumbbell', 'hammerCurl']
+        exercises: ['deadlift', 'barbellRow', 'chinUps', 'latPulldown', 'cableRow', 'bicepCurlBarbell', 'ezBarCurl', 'hammerCurl']
       },
       {
         name: 'Legs & Shoulders',
-        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'calfRaise', 'shoulderPressBarbell', 'sideLateralDumbbell', 'rearDeltFly', 'abCrunchMachine']
+        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'calfRaise', 'shoulderPressBarbell', 'arnoldPress', 'facePull', 'abCrunchMachine']
       }
     ]
   },
@@ -213,27 +217,27 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
     days: [
       {
         name: 'Chest & Back A',
-        exercises: ['benchPress', 'barbellRow', 'inclineBench', 'pullUps', 'cableFly', 'latPulldown', 'dumbbellPress', 'tBarRow']
+        exercises: ['benchPress', 'barbellRow', 'inclineBench', 'pullUps', 'dumbbellFly', 'latPulldown', 'cableFly']
       },
       {
         name: 'Shoulders & Arms A',
-        exercises: ['shoulderPressBarbell', 'bicepCurlBarbell', 'tricepPushdown', 'sideLateralDumbbell', 'hammerCurl', 'skullCrushers', 'facePull', 'preacherCurl']
+        exercises: ['shoulderPressBarbell', 'bicepCurlBarbell', 'closeGripBenchPress', 'sideLateralDumbbell', 'hammerCurl', 'tricepPushdown', 'facePull']
       },
       {
         name: 'Legs A',
-        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'legExtension', 'calfRaise', 'abCrunchMachine', 'hipThrust']
+        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'legExtension', 'calfRaise', 'abCrunchMachine']
       },
       {
         name: 'Chest & Back B',
-        exercises: ['inclineBench', 'pullUps', 'benchPress', 'barbellRow', 'latPulldown', 'pecDeck', 'dumbbellRow', 'cableRow']
+        exercises: ['dumbbellPress', 'chinUps', 'inclineDumbbellFly', 'pendlayRow', 'pecDeck', 'cableRow', 'barbellShrug']
       },
       {
         name: 'Shoulders & Arms B',
-        exercises: ['sideLateralDumbbell', 'skullCrushers', 'bicepCurlBarbell', 'shoulderPressDumbbell', 'tricepDip', 'bicepCurlDumbbell', 'rearDeltFly', 'overheadTricepExtension']
+        exercises: ['arnoldPress', 'ezBarCurl', 'skullCrushers', 'rearDeltFly', 'concentrationCurl', 'overheadTricepExtension', 'uprightRow']
       },
       {
         name: 'Legs B',
-        exercises: ['deadlift', 'squat', 'legPress', 'hackSquat', 'legCurl', 'calfRaise', 'abCrunchCable', 'gobletSquat']
+        exercises: ['deadlift', 'frontSquat', 'hipThrust', 'walkingLunge', 'legCurl', 'seatedCalfRaise', 'cableCrunchKneeling']
       }
     ]
   }

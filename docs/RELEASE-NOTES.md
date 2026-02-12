@@ -1,5 +1,30 @@
 # Release Notes
 
+## v1.x.x - Workout Programs Overhaul (Feb 2026)
+
+### What's New
+
+**All 7 workout programs redesigned** with proper exercise distribution and new exercises integrated.
+
+**Changes:**
+- Balanced 6-8 exercises per session (was 7-10, some days overloaded)
+- Compounds first, isolations after in every session
+- Fixed Face Pull on Push day (moved to Pull where it belongs)
+- New exercises integrated: Arnold Press, Chin-ups, Front Squat, Walking Lunges, Close-Grip Bench, EZ Bar Curl, Shrugs, and more
+- PPL days now labeled with focus (e.g., "Push A (Chest focus)", "Legs B (Posterior focus)")
+- Upper/Lower days labeled Strength vs Hypertrophy
+- Bro Split: added dedicated Core to Leg day, added traps to Back day
+- Arnold Split B days now use new exercises for variety (Pendlay Row, Incline DB Fly, Seated Calf Raise)
+
+### Google Play Store Description
+
+**Full changelog:**
+- Redesigned all 7 workout programs with better exercise balance
+- New exercises like Arnold Press, Chin-ups, and Front Squat now appear in programs
+- Each session now has 6-8 focused exercises instead of uneven splits
+
+---
+
 ## v1.x.x - OTP Login Fix (Feb 2026)
 
 ### Bug Fix
