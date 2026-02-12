@@ -669,6 +669,7 @@ export default function WorkoutLogger({ profileId, exerciseId, onLevelUp, onRequ
         <SessionSummary
           onClose={handleSessionSummaryClose}
           session={endSession()!}
+          bodyWeightKg={profile?.weight}
         />
       )}
 

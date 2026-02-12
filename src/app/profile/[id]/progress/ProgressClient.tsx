@@ -9,7 +9,7 @@ import { calculateStrengthScore, EXERCISES } from '@/lib/calculations/strength'
 import { getAllWorkouts, formatSessionDate, formatLocalDate } from '@/lib/storage/workouts'
 import { getScoreHistory, ScoreHistoryEntry } from '@/lib/storage/seedData'
 import { Badges } from '@/components/strength'
-import { MuscleHeatmap, WorkoutHistoryViewer } from '@/components/progress'
+import { MuscleHeatmap, WorkoutHistoryViewer, DaySummary } from '@/components/progress'
 import { getNutritionInfo, BMI_CATEGORIES, formatCalories, isBelowMinimum, TARGET_BMI, isNearTargetBMI } from '@/lib/calculations/nutrition'
 import { GOAL_INFO } from '@/types'
 import { formatWeightValue, getProfileColor } from '@/lib/utils/units'
@@ -55,6 +55,7 @@ export default function ProgressPage({ params }: ProgressPageProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [workoutsByExercise, setWorkoutsByExercise] = useState<Record<Exercise, WorkoutSession[]>>({} as Record<Exercise, WorkoutSession[]>)
   const [showHistoryViewer, setShowHistoryViewer] = useState(false)
+  const [showDaySummary, setShowDaySummary] = useState(false)
 
   useEffect(() => {
     const loadedProfile = getProfileById(id)
@@ -262,7 +263,28 @@ export default function ProgressPage({ params }: ProgressPageProps) {
         {/* 6. Achievements (Bottom) */}
         <Badges badges={badges} />
 
-        {/* 7. View All Workout History */}
+        {/* 7. View Day Summaries */}
+        <button
+          onClick={() => setShowDaySummary(true)}
+          className="w-full bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">📊</span>
+            <div className="text-left">
+              <h3 className="font-semibold text-gray-700 dark:text-gray-200">
+                Daily Workout Summaries
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Browse day-by-day stats, volume trends & comparisons
+              </p>
+            </div>
+          </div>
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        {/* 8. View All Workout History */}
         <button
           onClick={() => setShowHistoryViewer(true)}
           className="w-full bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
@@ -283,6 +305,13 @@ export default function ProgressPage({ params }: ProgressPageProps) {
           </svg>
         </button>
       </main>
+
+      {/* Day Summary Modal */}
+      <DaySummary
+        profileId={id}
+        isOpen={showDaySummary}
+        onClose={() => setShowDaySummary(false)}
+      />
 
       {/* Workout History Viewer Modal */}
       <WorkoutHistoryViewer

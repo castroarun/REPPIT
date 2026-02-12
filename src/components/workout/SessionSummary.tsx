@@ -5,10 +5,12 @@ import { WorkoutSession, formatSessionDuration } from '@/lib/storage/session'
 import { LEVEL_COLORS, LEVEL_FULL_NAMES } from '@/types'
 import { useUnit } from '@/contexts'
 import { formatWeightValue } from '@/lib/utils/units'
+import { estimateCaloriesBurned } from '@/lib/storage/dailySummary'
 
 interface SessionSummaryProps {
   onClose: () => void
   session: WorkoutSession
+  bodyWeightKg?: number
 }
 
 /**
@@ -23,7 +25,7 @@ function getStartTime(startTime: string): string {
   })
 }
 
-export default function SessionSummary({ onClose, session }: SessionSummaryProps) {
+export default function SessionSummary({ onClose, session, bodyWeightKg = 70 }: SessionSummaryProps) {
   const { unit } = useUnit()
 
   // Calculate summary statistics
@@ -52,9 +54,10 @@ export default function SessionSummary({ onClose, session }: SessionSummaryProps
       endTime: session.lastActivityTime ? getStartTime(session.lastActivityTime) : getStartTime(session.startTime),
       exerciseCount,
       totalSets,
-      totalVolume: Math.round(totalVolume)
+      totalVolume: Math.round(totalVolume),
+      estimatedCalories: estimateCaloriesBurned(totalSets, bodyWeightKg)
     }
-  }, [session])
+  }, [session, bodyWeightKg])
 
   // Check if this was a productive session (at least 1 set logged)
   const isProductive = stats.totalSets > 0
@@ -122,6 +125,20 @@ export default function SessionSummary({ onClose, session }: SessionSummaryProps
                     {formatWeightValue(stats.totalVolume, unit)}
                     <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">{unit}</span>
                   </div>
+                </div>
+              </div>
+
+              {/* Estimated Calories */}
+              <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-3 mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🔥</span>
+                  <span className="text-red-600 dark:text-red-400 text-xs font-medium uppercase tracking-wide">
+                    Est. Calories Burned
+                  </span>
+                </div>
+                <div className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats.estimatedCalories}
+                  <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">kcal</span>
                 </div>
               </div>
 
