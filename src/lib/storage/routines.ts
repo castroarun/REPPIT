@@ -4,6 +4,7 @@ const ROUTINES_KEY = 'strength_profile_workout_routines'
 const SELECTED_ROUTINE_KEY = 'strength_profile_selected_routine'
 const SELECTED_EXERCISES_KEY = 'strength_profile_selected_exercises'
 const ROUTINE_EXERCISES_PREFIX = 'strength_profile_routine_exercises_'
+const ROUTINE_EXTRA_EXERCISES_PREFIX = 'strength_profile_routine_extra_'
 
 // Exercises that are selected by default when choosing a routine
 // Includes 2-3 core exercises per body part for balanced default selection
@@ -200,11 +201,11 @@ export const PREDEFINED_ROUTINES: WorkoutRoutine[] = [
       },
       {
         name: 'Back & Biceps',
-        exercises: ['deadlift', 'barbellRow', 'chinUps', 'latPulldown', 'cableRow', 'bicepCurlBarbell', 'ezBarCurl', 'hammerCurl']
+        exercises: ['deadlift', 'barbellRow', 'chinUps', 'latPulldown', 'bicepCurlBarbell', 'ezBarCurl', 'hammerCurl']
       },
       {
         name: 'Legs & Shoulders',
-        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'calfRaise', 'shoulderPressBarbell', 'arnoldPress', 'facePull', 'abCrunchMachine']
+        exercises: ['squat', 'legPress', 'romanianDeadlift', 'legCurl', 'calfRaise', 'shoulderPressBarbell', 'facePull']
       }
     ]
   },
@@ -498,6 +499,58 @@ export function initializeRoutineExercises(routine: WorkoutRoutine): Exercise[] 
 
   setRoutineExercises(routine.id, defaultSelection)
   return defaultSelection
+}
+
+/**
+ * Get extra (user-added) exercises for a routine, keyed by day index
+ */
+export function getRoutineExtraExercises(routineId: string): Record<number, Exercise[]> {
+  if (typeof window === 'undefined') return {}
+
+  const stored = localStorage.getItem(ROUTINE_EXTRA_EXERCISES_PREFIX + routineId)
+  if (!stored) return {}
+
+  try {
+    return JSON.parse(stored)
+  } catch {
+    return {}
+  }
+}
+
+/**
+ * Add an exercise to a specific day of a routine
+ */
+export function addExerciseToRoutineDay(routineId: string, dayIndex: number, exerciseId: Exercise): Record<number, Exercise[]> {
+  const extras = getRoutineExtraExercises(routineId)
+  if (!extras[dayIndex]) extras[dayIndex] = []
+
+  if (!extras[dayIndex].includes(exerciseId)) {
+    extras[dayIndex].push(exerciseId)
+    localStorage.setItem(ROUTINE_EXTRA_EXERCISES_PREFIX + routineId, JSON.stringify(extras))
+
+    // Also add to routine's selected exercises so it's toggled on
+    const selected = getRoutineExercises(routineId)
+    if (!selected.includes(exerciseId)) {
+      selected.push(exerciseId)
+      setRoutineExercises(routineId, selected)
+    }
+  }
+
+  return extras
+}
+
+/**
+ * Remove a user-added exercise from a specific day of a routine
+ */
+export function removeExerciseFromRoutineDay(routineId: string, dayIndex: number, exerciseId: Exercise): Record<number, Exercise[]> {
+  const extras = getRoutineExtraExercises(routineId)
+  if (!extras[dayIndex]) return extras
+
+  extras[dayIndex] = extras[dayIndex].filter(id => id !== exerciseId)
+  if (extras[dayIndex].length === 0) delete extras[dayIndex]
+
+  localStorage.setItem(ROUTINE_EXTRA_EXERCISES_PREFIX + routineId, JSON.stringify(extras))
+  return extras
 }
 
 /**
