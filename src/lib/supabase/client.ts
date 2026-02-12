@@ -11,6 +11,7 @@ let supabaseClient: SupabaseClient<Database> | null = null
 if (supabaseUrl && supabaseAnonKey) {
   supabaseClient = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
+      flowType: 'implicit',       // Avoid PKCE - OTP doesn't need code_verifier
       detectSessionInUrl: true,
       persistSession: true,
       autoRefreshToken: true

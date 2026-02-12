@@ -164,7 +164,27 @@ CREATE TRIGGER workouts_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 ```
 
-## 3. Configure Google OAuth
+## 3. Fix OTP Email Template (Important)
+
+By default, Supabase sends both a **magic link** and an **OTP code** in the same email. Email clients (Gmail, Outlook) often prefetch/preview the magic link, which **consumes the token and invalidates the OTP code** before the user reads the email.
+
+**Fix:** Remove the magic link from the email template:
+
+1. Go to **Authentication > Email Templates** in Supabase Dashboard
+2. Select the **"Magic Link"** template
+3. Replace the template with one that only shows the OTP code:
+
+```html
+<h2>Your REPPIT sign-in code</h2>
+<p>Enter this code in the app to sign in:</p>
+<h1 style="font-size: 32px; letter-spacing: 8px; font-family: monospace; background: #f0f0f0; padding: 16px; text-align: center; border-radius: 8px;">{{ .Token }}</h1>
+<p>This code expires in 10 minutes.</p>
+<p>If you didn't request this, you can safely ignore this email.</p>
+```
+
+**Key change:** Remove `{{ .ConfirmationURL }}` — this is the magic link that email clients prefetch and invalidate.
+
+## 4. Configure Google OAuth (Optional)
 
 1. In Supabase Dashboard: **Authentication > Providers > Google**
 2. Enable Google provider
@@ -173,7 +193,7 @@ CREATE TRIGGER workouts_updated_at
    - Add authorized redirect URI: `https://xxxxx.supabase.co/auth/v1/callback`
 4. Enter Client ID and Client Secret in Supabase
 
-## 4. Set Environment Variables on Vercel
+## 5. Set Environment Variables on Vercel
 
 Go to your Vercel project settings and add:
 
@@ -182,7 +202,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbG...your-anon-key
 ```
 
-## 5. Redeploy
+## 6. Redeploy
 
 After adding env vars, redeploy your app:
 ```bash

@@ -20,6 +20,7 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
   const [codeSent, setCodeSent] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
   const hasAutoSubmitted = useRef(false)
+  const failCount = useRef(0)
 
   // Show domain suggestions when user has typed something but no @ yet
   const showDomainSuggestions = email.length > 0 && !email.includes('@')
@@ -71,16 +72,28 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
 
     const { error } = await verifyOtpCode(email, code)
 
-    setIsLoading(false)
-
     if (error) {
-      // Make error messages more user-friendly
+      failCount.current++
+
+      // On first failure, auto-resend a fresh code
+      if (failCount.current === 1) {
+        await sendOtpCode(email)
+        setIsLoading(false)
+        setError('Code didn\'t work — we\'ve sent a fresh one. Please check your email.')
+        setOtpCode('')
+        return
+      }
+
+      setIsLoading(false)
       if (error.message.includes('expired') || error.message.includes('invalid')) {
         setError('Code expired or invalid. Please request a new code.')
       } else {
         setError(error.message)
       }
-      setOtpCode('') // Clear the invalid code
+      setOtpCode('')
+    } else {
+      setIsLoading(false)
+      failCount.current = 0
     }
     // Success - AuthContext will update and redirect automatically
   }
@@ -89,6 +102,8 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
     setIsLoading(true)
     setError(null)
     setResendSuccess(false)
+    failCount.current = 0
+    hasAutoSubmitted.current = false
 
     const { error } = await sendOtpCode(email)
 
@@ -98,7 +113,6 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
       setError(error.message)
     } else {
       setResendSuccess(true)
-      // Clear success message after 3 seconds
       setTimeout(() => setResendSuccess(false), 3000)
     }
   }
@@ -108,6 +122,7 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
     setOtpCode('')
     setError(null)
     hasAutoSubmitted.current = false
+    failCount.current = 0
   }
 
   // Auto-verify when 6 digits entered
@@ -120,19 +135,32 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
 
     const { error } = await verifyOtpCode(email, code)
 
-    setIsLoading(false)
-
     if (error) {
-      // Make error messages more user-friendly
+      failCount.current++
+
+      // On first failure, auto-resend a fresh code
+      if (failCount.current === 1) {
+        await sendOtpCode(email)
+        setIsLoading(false)
+        setError('Code didn\'t work — we\'ve sent a fresh one. Please check your email.')
+        hasAutoSubmitted.current = false
+        setOtpCode('')
+        return
+      }
+
+      setIsLoading(false)
       if (error.message.includes('expired') || error.message.includes('invalid')) {
         setError('Code expired or invalid. Please request a new code.')
       } else {
         setError(error.message)
       }
-      hasAutoSubmitted.current = false // Allow retry
-      setOtpCode('') // Clear the invalid code
+      hasAutoSubmitted.current = false
+      setOtpCode('')
+    } else {
+      setIsLoading(false)
+      failCount.current = 0
     }
-  }, [email, isLoading, verifyOtpCode])
+  }, [email, isLoading, verifyOtpCode, sendOtpCode])
 
   // Auto-submit when OTP is complete
   useEffect(() => {
