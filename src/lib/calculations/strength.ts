@@ -52,6 +52,23 @@ export const EXERCISES: ExerciseInfo[] = [
     multipliers: { beginner: 0.55, novice: 0.78, intermediate: 1.00, advanced: 1.22 },
     femaleMultipliers: { beginner: 0.33, novice: 0.48, intermediate: 0.61, advanced: 0.79 }
   },
+  {
+    id: 'dumbbellFly', name: 'Dumbbell Fly', bodyPart: 'chest',
+    multipliers: { beginner: 0.12, novice: 0.18, intermediate: 0.25, advanced: 0.33 },
+    femaleMultipliers: { beginner: 0.08, novice: 0.12, intermediate: 0.17, advanced: 0.22 },
+    isDumbbell: true
+  },
+  {
+    id: 'pushUps', name: 'Push-ups', bodyPart: 'chest',
+    multipliers: { beginner: 0.00, novice: 0.00, intermediate: 0.00, advanced: 0.00 },
+    femaleMultipliers: { beginner: 0.00, novice: 0.00, intermediate: 0.00, advanced: 0.00 }
+  },
+  {
+    id: 'inclineDumbbellFly', name: 'Incline Dumbbell Fly', bodyPart: 'chest',
+    multipliers: { beginner: 0.10, novice: 0.16, intermediate: 0.22, advanced: 0.30 },
+    femaleMultipliers: { beginner: 0.07, novice: 0.11, intermediate: 0.15, advanced: 0.20 },
+    isDumbbell: true
+  },
 
   // BACK
   {
@@ -95,6 +112,21 @@ export const EXERCISES: ExerciseInfo[] = [
     multipliers: { beginner: 0.50, novice: 0.70, intermediate: 0.90, advanced: 1.15 },
     femaleMultipliers: { beginner: 0.35, novice: 0.49, intermediate: 0.63, advanced: 0.81 }
   },
+  {
+    id: 'chinUps', name: 'Chin-ups', bodyPart: 'back',
+    multipliers: { beginner: 0.50, novice: 0.80, intermediate: 1.05, advanced: 1.35 },
+    femaleMultipliers: { beginner: 0.00, novice: 0.45, intermediate: 0.65, advanced: 0.95 }
+  },
+  {
+    id: 'pendlayRow', name: 'Pendlay Row', bodyPart: 'back',
+    multipliers: { beginner: 0.45, novice: 0.65, intermediate: 0.85, advanced: 1.10 },
+    femaleMultipliers: { beginner: 0.30, novice: 0.43, intermediate: 0.56, advanced: 0.73 }
+  },
+  {
+    id: 'singleArmCablePulldown', name: 'Single-Arm Cable Pulldown', bodyPart: 'back',
+    multipliers: { beginner: 0.20, novice: 0.30, intermediate: 0.40, advanced: 0.52 },
+    femaleMultipliers: { beginner: 0.14, novice: 0.21, intermediate: 0.28, advanced: 0.36 }
+  },
 
   // SHOULDERS
   {
@@ -137,6 +169,33 @@ export const EXERCISES: ExerciseInfo[] = [
   },
   {
     id: 'facePull', name: 'Face Pull', bodyPart: 'shoulders',
+    multipliers: { beginner: 0.15, novice: 0.25, intermediate: 0.35, advanced: 0.45 },
+    femaleMultipliers: { beginner: 0.10, novice: 0.17, intermediate: 0.24, advanced: 0.31 }
+  },
+  {
+    id: 'arnoldPress', name: 'Arnold Press', bodyPart: 'shoulders',
+    multipliers: { beginner: 0.15, novice: 0.23, intermediate: 0.32, advanced: 0.42 },
+    femaleMultipliers: { beginner: 0.10, novice: 0.16, intermediate: 0.22, advanced: 0.29 },
+    isDumbbell: true
+  },
+  {
+    id: 'uprightRow', name: 'Upright Row', bodyPart: 'shoulders',
+    multipliers: { beginner: 0.25, novice: 0.38, intermediate: 0.50, advanced: 0.65 },
+    femaleMultipliers: { beginner: 0.17, novice: 0.26, intermediate: 0.35, advanced: 0.45 }
+  },
+  {
+    id: 'dumbbellShrug', name: 'Dumbbell Shrug', bodyPart: 'shoulders',
+    multipliers: { beginner: 0.25, novice: 0.38, intermediate: 0.50, advanced: 0.65 },
+    femaleMultipliers: { beginner: 0.17, novice: 0.26, intermediate: 0.35, advanced: 0.45 },
+    isDumbbell: true
+  },
+  {
+    id: 'barbellShrug', name: 'Barbell Shrug', bodyPart: 'shoulders',
+    multipliers: { beginner: 0.60, novice: 0.90, intermediate: 1.20, advanced: 1.55 },
+    femaleMultipliers: { beginner: 0.42, novice: 0.63, intermediate: 0.84, advanced: 1.09 }
+  },
+  {
+    id: 'reversePecDeck', name: 'Reverse Pec Deck', bodyPart: 'shoulders',
     multipliers: { beginner: 0.15, novice: 0.25, intermediate: 0.35, advanced: 0.45 },
     femaleMultipliers: { beginner: 0.10, novice: 0.17, intermediate: 0.24, advanced: 0.31 }
   },
@@ -193,6 +252,37 @@ export const EXERCISES: ExerciseInfo[] = [
     multipliers: { beginner: 0.80, novice: 1.20, intermediate: 1.60, advanced: 2.00 },
     femaleMultipliers: { beginner: 0.56, novice: 0.84, intermediate: 1.12, advanced: 1.40 }
   },
+  {
+    id: 'walkingLunge', name: 'Walking Lunge', bodyPart: 'legs',
+    multipliers: { beginner: 0.18, novice: 0.28, intermediate: 0.38, advanced: 0.50 },
+    femaleMultipliers: { beginner: 0.13, novice: 0.20, intermediate: 0.27, advanced: 0.35 },
+    isDumbbell: true
+  },
+  {
+    id: 'sumoDeadlift', name: 'Sumo Deadlift', bodyPart: 'legs',
+    multipliers: { beginner: 0.90, novice: 1.25, intermediate: 1.65, advanced: 2.10 },
+    femaleMultipliers: { beginner: 0.63, novice: 0.88, intermediate: 1.16, advanced: 1.47 }
+  },
+  {
+    id: 'seatedCalfRaise', name: 'Seated Calf Raise', bodyPart: 'legs',
+    multipliers: { beginner: 0.40, novice: 0.65, intermediate: 0.90, advanced: 1.20 },
+    femaleMultipliers: { beginner: 0.28, novice: 0.46, intermediate: 0.63, advanced: 0.84 }
+  },
+  {
+    id: 'adductorMachine', name: 'Adductor Machine', bodyPart: 'legs',
+    multipliers: { beginner: 0.50, novice: 0.75, intermediate: 1.00, advanced: 1.30 },
+    femaleMultipliers: { beginner: 0.40, novice: 0.60, intermediate: 0.80, advanced: 1.04 }
+  },
+  {
+    id: 'abductorMachine', name: 'Abductor Machine', bodyPart: 'legs',
+    multipliers: { beginner: 0.40, novice: 0.60, intermediate: 0.80, advanced: 1.05 },
+    femaleMultipliers: { beginner: 0.32, novice: 0.48, intermediate: 0.64, advanced: 0.84 }
+  },
+  {
+    id: 'frontSquat', name: 'Front Squat', bodyPart: 'legs',
+    multipliers: { beginner: 0.60, novice: 0.90, intermediate: 1.20, advanced: 1.55 },
+    femaleMultipliers: { beginner: 0.42, novice: 0.63, intermediate: 0.84, advanced: 1.09 }
+  },
 
   // ARMS
   {
@@ -242,6 +332,44 @@ export const EXERCISES: ExerciseInfo[] = [
     multipliers: { beginner: 0.20, novice: 0.32, intermediate: 0.44, advanced: 0.56 },
     femaleMultipliers: { beginner: 0.14, novice: 0.22, intermediate: 0.31, advanced: 0.39 }
   },
+  {
+    id: 'closeGripBenchPress', name: 'Close-Grip Bench Press', bodyPart: 'arms',
+    multipliers: { beginner: 0.50, novice: 0.70, intermediate: 0.90, advanced: 1.15 },
+    femaleMultipliers: { beginner: 0.30, novice: 0.43, intermediate: 0.55, advanced: 0.72 }
+  },
+  {
+    id: 'concentrationCurl', name: 'Concentration Curl', bodyPart: 'arms',
+    multipliers: { beginner: 0.10, novice: 0.15, intermediate: 0.22, advanced: 0.28 },
+    femaleMultipliers: { beginner: 0.07, novice: 0.10, intermediate: 0.15, advanced: 0.19 },
+    isDumbbell: true
+  },
+  {
+    id: 'tricepKickback', name: 'Tricep Kickback', bodyPart: 'arms',
+    multipliers: { beginner: 0.08, novice: 0.13, intermediate: 0.18, advanced: 0.25 },
+    femaleMultipliers: { beginner: 0.05, novice: 0.09, intermediate: 0.12, advanced: 0.17 },
+    isDumbbell: true
+  },
+  {
+    id: 'inclineDumbbellCurl', name: 'Incline Dumbbell Curl', bodyPart: 'arms',
+    multipliers: { beginner: 0.10, novice: 0.15, intermediate: 0.22, advanced: 0.28 },
+    femaleMultipliers: { beginner: 0.07, novice: 0.10, intermediate: 0.15, advanced: 0.19 },
+    isDumbbell: true
+  },
+  {
+    id: 'reverseCurl', name: 'Reverse Curl', bodyPart: 'arms',
+    multipliers: { beginner: 0.18, novice: 0.28, intermediate: 0.38, advanced: 0.48 },
+    femaleMultipliers: { beginner: 0.12, novice: 0.19, intermediate: 0.26, advanced: 0.33 }
+  },
+  {
+    id: 'wristCurl', name: 'Wrist Curl', bodyPart: 'arms',
+    multipliers: { beginner: 0.15, novice: 0.25, intermediate: 0.35, advanced: 0.45 },
+    femaleMultipliers: { beginner: 0.10, novice: 0.17, intermediate: 0.24, advanced: 0.31 }
+  },
+  {
+    id: 'ezBarCurl', name: 'EZ Bar Curl', bodyPart: 'arms',
+    multipliers: { beginner: 0.22, novice: 0.35, intermediate: 0.47, advanced: 0.60 },
+    femaleMultipliers: { beginner: 0.15, novice: 0.24, intermediate: 0.33, advanced: 0.42 }
+  },
 
   // CORE
   {
@@ -271,6 +399,26 @@ export const EXERCISES: ExerciseInfo[] = [
   },
   {
     id: 'legRaise', name: 'Leg Raise', bodyPart: 'core',
+    multipliers: { beginner: 0.00, novice: 0.00, intermediate: 0.00, advanced: 0.00 },
+    femaleMultipliers: { beginner: 0.00, novice: 0.00, intermediate: 0.00, advanced: 0.00 }
+  },
+  {
+    id: 'declineSitUp', name: 'Decline Sit-up', bodyPart: 'core',
+    multipliers: { beginner: 0.10, novice: 0.18, intermediate: 0.28, advanced: 0.38 },
+    femaleMultipliers: { beginner: 0.07, novice: 0.13, intermediate: 0.20, advanced: 0.27 }
+  },
+  {
+    id: 'pallofPress', name: 'Pallof Press', bodyPart: 'core',
+    multipliers: { beginner: 0.10, novice: 0.18, intermediate: 0.26, advanced: 0.35 },
+    femaleMultipliers: { beginner: 0.07, novice: 0.13, intermediate: 0.18, advanced: 0.25 }
+  },
+  {
+    id: 'cableCrunchKneeling', name: 'Kneeling Cable Crunch', bodyPart: 'core',
+    multipliers: { beginner: 0.30, novice: 0.45, intermediate: 0.60, advanced: 0.80 },
+    femaleMultipliers: { beginner: 0.21, novice: 0.32, intermediate: 0.42, advanced: 0.56 }
+  },
+  {
+    id: 'abRollout', name: 'Ab Rollout', bodyPart: 'core',
     multipliers: { beginner: 0.00, novice: 0.00, intermediate: 0.00, advanced: 0.00 },
     femaleMultipliers: { beginner: 0.00, novice: 0.00, intermediate: 0.00, advanced: 0.00 }
   },
@@ -453,7 +601,7 @@ const BADGE_DEFINITIONS: Omit<Badge, 'earned'>[] = [
   {
     id: 'fullAssessment',
     name: 'Full Assessment',
-    description: 'Rate all 25 exercises',
+    description: 'Rate all exercises',
     icon: '🏆'
   },
   {
@@ -502,7 +650,7 @@ export function calculateBadges(ratings: ExerciseRatings): Badge[] {
       case 'dedicatedTrainer':
         return ratedCount >= 10
       case 'fullAssessment':
-        return ratedCount >= 25
+        return ratedCount >= EXERCISES.length
       case 'noviceMilestone':
         return hasLevel('novice') || hasLevel('intermediate') || hasLevel('advanced')
       case 'breakingIntermediate':
@@ -690,7 +838,7 @@ export function generateCoachTips(ratings: ExerciseRatings): CoachTip[] {
 
   if (bodyPartsWithExercises.length > 0 && tips.length < 2) {
     const exercisesPerBodyPart: Record<BodyPart, number> = {
-      chest: 4, back: 5, shoulders: 6, legs: 6, arms: 4, core: 0
+      chest: 10, back: 11, shoulders: 13, legs: 16, arms: 17, core: 10
     }
 
     // Find most neglected body part that has exercises in our list

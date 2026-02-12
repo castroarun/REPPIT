@@ -65,6 +65,40 @@ export type Exercise =
   | 'cableWoodchop'
   | 'russianTwist'
   | 'legRaise'
+  // Chest (new)
+  | 'dumbbellFly'
+  | 'pushUps'
+  | 'inclineDumbbellFly'
+  // Back (new)
+  | 'chinUps'
+  | 'pendlayRow'
+  | 'singleArmCablePulldown'
+  // Shoulders (new)
+  | 'arnoldPress'
+  | 'uprightRow'
+  | 'dumbbellShrug'
+  | 'barbellShrug'
+  | 'reversePecDeck'
+  // Legs (new)
+  | 'walkingLunge'
+  | 'sumoDeadlift'
+  | 'seatedCalfRaise'
+  | 'adductorMachine'
+  | 'abductorMachine'
+  | 'frontSquat'
+  // Arms (new)
+  | 'closeGripBenchPress'
+  | 'concentrationCurl'
+  | 'tricepKickback'
+  | 'inclineDumbbellCurl'
+  | 'reverseCurl'
+  | 'wristCurl'
+  | 'ezBarCurl'
+  // Core (new)
+  | 'declineSitUp'
+  | 'pallofPress'
+  | 'cableCrunchKneeling'
+  | 'abRollout'
 
 // Exercise metadata
 export interface ExerciseInfo {
