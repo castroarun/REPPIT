@@ -20,6 +20,7 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
   const [codeSent, setCodeSent] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
   const hasAutoSubmitted = useRef(false)
+  const isVerifying = useRef(false)
 
   // Show domain suggestions when user has typed something but no @ yet
   const showDomainSuggestions = email.length > 0 && !email.includes('@')
@@ -66,17 +67,18 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
       return
     }
 
+    if (isVerifying.current) return
+    isVerifying.current = true
     setIsLoading(true)
     setError(null)
 
     const { error } = await verifyOtpCode(email, code)
 
+    isVerifying.current = false
+    setIsLoading(false)
     if (error) {
-      setIsLoading(false)
       setError(error.message)
       setOtpCode('')
-    } else {
-      setIsLoading(false)
     }
   }
 
@@ -106,31 +108,25 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
   }
 
   // Auto-verify when 6 digits entered
-  const autoVerify = useCallback(async (code: string) => {
-    if (code.length !== 6 || isLoading || hasAutoSubmitted.current) return
+  useEffect(() => {
+    if (!codeSent || otpCode.length !== 6 || isVerifying.current || hasAutoSubmitted.current) return
 
     hasAutoSubmitted.current = true
+    isVerifying.current = true
     setIsLoading(true)
     setError(null)
 
-    const { error } = await verifyOtpCode(email, code)
-
-    if (error) {
+    verifyOtpCode(email, otpCode).then(({ error }) => {
+      isVerifying.current = false
       setIsLoading(false)
-      setError(error.message)
-      hasAutoSubmitted.current = false
-      setOtpCode('')
-    } else {
-      setIsLoading(false)
-    }
-  }, [email, isLoading, verifyOtpCode])
-
-  // Auto-submit when OTP is complete
-  useEffect(() => {
-    if (codeSent && otpCode.length === 6 && !hasAutoSubmitted.current) {
-      autoVerify(otpCode)
-    }
-  }, [otpCode, codeSent, autoVerify])
+      if (error) {
+        setError(error.message)
+        hasAutoSubmitted.current = false
+        setOtpCode('')
+      }
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otpCode])
 
   // Try WebOTP API for auto-detection (works with SMS on supported browsers)
   useEffect(() => {
