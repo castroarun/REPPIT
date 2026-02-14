@@ -610,15 +610,15 @@
     </div>
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-number">77</div>
+        <div class="stat-number" data-target="77">0</div>
         <div class="stat-label">Exercises</div>
       </div>
       <div class="stat">
-        <div class="stat-number">7</div>
+        <div class="stat-number" data-target="7">0</div>
         <div class="stat-label">Programs</div>
       </div>
       <div class="stat">
-        <div class="stat-number">4</div>
+        <div class="stat-number" data-target="4">0</div>
         <div class="stat-label">Levels</div>
       </div>
     </div>
@@ -942,6 +942,33 @@
   </p>
   <p style="margin-top: 12px;">#buildinpublic #fitness #strengthtraining #nextjs #typescript #pwa #mobiledev</p>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+    const duration = 1600;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        if (el.dataset.counted) return;
+        el.dataset.counted = 'true';
+        const target = parseInt(el.dataset.target);
+        const start = performance.now();
+        const tick = (now) => {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target);
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(c => observer.observe(c));
+  });
+</script>
 
 </body>
 </html>
