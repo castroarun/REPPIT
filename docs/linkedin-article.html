@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REPPIT — A Strength Tracker Built From the Gym Floor</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0f172a;
+      color: #cbd5e1;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1920&q=80') center/cover no-repeat;
+      opacity: 0.06;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ========== HERO / COVER ========== */
+    .hero {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -150px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-left {
+      flex: 1.2;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-right {
+      flex: 0.8;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-name {
+      font-size: 64px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -2px;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .app-name-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .app-name-divider {
+      width: 3px;
+      height: 52px;
+      background: #f97316;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .app-name-quote {
+      font-size: 16px;
+      color: #94a3b8;
+      font-style: italic;
+      line-height: 1.4;
+      max-width: 280px;
+    }
+
+    .app-name .accent-orange { color: #f97316; }
+
+    .hero-tagline {
+      font-size: 24px;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin-bottom: 36px;
+      max-width: 500px;
+    }
+
+    .hero-tagline strong {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: #f97316;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    .tech-stack-line {
+      font-size: 14px;
+      color: #475569;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tech-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #475569;
+      display: inline-block;
+    }
+
+    .hero-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-author img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .hero-author-text {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .hero-author-text strong {
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .hero-author-text a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .hero-author-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Phone mockups in hero */
+    .phone-stack {
+      position: relative;
+      width: 300px;
+      height: 500px;
+    }
+
+    .phone {
+      position: absolute;
+      width: 200px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .phone img {
+      width: 100%;
+      display: block;
+    }
+
+    .phone-1 {
+      top: 0;
+      left: 0;
+      z-index: 3;
+      transform: rotate(-3deg);
+    }
+
+    .phone-2 {
+      top: 30px;
+      left: 100px;
+      z-index: 2;
+      transform: rotate(3deg);
+    }
+
+    /* Gradient divider below hero */
+    .hero-divider {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #3b82f6, #06b6d4, #3b82f6, transparent);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ========== ARTICLE CONTENT ========== */
+    .article {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .article h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 32px;
+      letter-spacing: -0.5px;
+    }
+
+    .article h2 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .article h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 28px;
+      margin-bottom: 12px;
+    }
+
+    .article p {
+      margin: 14px 0;
+      color: #cbd5e1;
+    }
+
+    .article strong {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .article em {
+      color: #94a3b8;
+    }
+
+    .article a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .article a:hover {
+      text-decoration: underline;
+    }
+
+    .article ul, .article ol {
+      margin: 14px 0;
+      padding-left: 24px;
+    }
+
+    .article li {
+      margin: 8px 0;
+      color: #cbd5e1;
+    }
+
+    .article hr {
+      border: none;
+      border-top: 1px solid rgba(59, 130, 246, 0.15);
+      margin: 40px 0;
+    }
+
+    /* Tables */
+    .article table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+
+    .article th {
+      background: rgba(59, 130, 246, 0.1);
+      color: #e2e8f0;
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: left;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+    }
+
+    .article td {
+      padding: 10px 16px;
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      color: #cbd5e1;
+    }
+
+    .article tr:nth-child(even) td {
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    /* Screenshots */
+    .screenshot {
+      margin: 28px 0;
+      text-align: center;
+    }
+
+    .screenshot img {
+      max-width: 320px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .screenshot figcaption {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Two screenshots side by side */
+    .screenshot-pair {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+
+    .screenshot-pair figure {
+      text-align: center;
+    }
+
+    .screenshot-pair img {
+      max-width: 280px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .screenshot-pair figcaption {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* Three screenshots side by side */
+    .screenshot-trio {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+
+    .screenshot-trio figure {
+      text-align: center;
+    }
+
+    .screenshot-trio img {
+      max-width: 220px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .screenshot-trio figcaption {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* CTA section */
+    .cta-section {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      border: none;
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .cta-link {
+      display: inline-block;
+      background: #3b82f6;
+      color: #fff !important;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none !important;
+      margin-top: 16px;
+      transition: background 0.2s;
+    }
+
+    .cta-link:hover {
+      background: #2563eb;
+    }
+
+    .cta-qr {
+      margin: 16px 0;
+    }
+
+    .cta-qr img {
+      border-radius: 12px;
+      padding: 8px;
+      background: #ffffff;
+    }
+
+    /* Author card */
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 40px 0 0;
+    }
+
+    .author-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .author-handle {
+      font-size: 14px;
+      color: #3b82f6;
+      margin-top: 2px;
+    }
+
+    .author-bio {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .author-links {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .author-links a {
+      font-size: 13px;
+      color: #60a5fa;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .author-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: #475569;
+      font-size: 14px;
+      border-top: 1px solid rgba(59, 130, 246, 0.1);
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .footer a { color: #60a5fa; text-decoration: none; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .hero-left { align-items: center; display: flex; flex-direction: column; }
+      .hero-right { display: none; }
+      .app-name { font-size: 48px; }
+      .hero-tagline { font-size: 20px; }
+      .stats-row { gap: 20px; flex-wrap: wrap; justify-content: center; }
+      .stat-number { font-size: 28px; }
+      .app-name-row { flex-direction: column; gap: 8px; align-items: center; }
+      .app-name-divider { width: 40px; height: 3px; }
+      .app-name-quote { text-align: center; max-width: 100%; }
+      .tech-stack-line { justify-content: center; flex-wrap: wrap; }
+      .screenshot img { max-width: 280px; }
+      .screenshot-pair { flex-direction: column; align-items: center; }
+      .screenshot-pair img { max-width: 280px; }
+      .screenshot-trio { flex-direction: column; align-items: center; }
+      .screenshot-trio img { max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="app-name-row">
+      <div class="app-name">REP<span class="accent-orange">PIT</span></div>
+      <div class="app-name-divider"></div>
+      <div class="app-name-quote">"Muscle is the organ of longevity." — Dr. Gabrielle Lyon</div>
+    </div>
+    <div class="hero-tagline">
+      A strength tracker that tells you <strong>where you stand</strong> — not just what you lifted.
+    </div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-number">77</div>
+        <div class="stat-label">Exercises</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">7</div>
+        <div class="stat-label">Programs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Levels</div>
+      </div>
+    </div>
+    <div class="tech-stack-line">
+      Next.js 16 <span class="tech-dot"></span> TypeScript <span class="tech-dot"></span> Tailwind <span class="tech-dot"></span> Capacitor
+    </div>
+    <div class="hero-author">
+      <img src="../public/avatars/arun.jpg" alt="Arun">
+      <div class="hero-author-text">
+        <strong>Arun Castromin</strong> · castronix<br>
+        <a href="https://www.linkedin.com/in/aruncastromin">LinkedIn</a> ·
+        <a href="https://github.com/castroarun">GitHub</a> ·
+        <a href="https://castroarun.github.io/portfolio/resume/">castronix.dev</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="phone-stack">
+      <div class="phone phone-1">
+        <img src="screenshots/hero-dashboard.jpeg" alt="REPPIT Dashboard">
+      </div>
+      <div class="phone phone-2">
+        <img src="screenshots/strength-standards.jpeg" alt="Workout Logger">
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hero-divider"></div>
+
+<!-- ========== ARTICLE ========== -->
+<article class="article">
+
+  <h1>Built From the Gym Floor</h1>
+
+  <p>Two intense years of weight training — not casual gym visits, but disciplined, consistent work. Tracking lifts, following science-based programming, studying progressive overload, experimenting with routines, and eventually helping friends at the gym figure out their own training.</p>
+
+  <p>The same questions kept coming up: "Am I lifting enough for my body weight?" "What level am I actually at?" "Why is my bench decent but my squat lagging behind?"</p>
+
+  <p>The information exists — StrengthLevel.com publishes body-weight multipliers, research backs progressive overload principles, and any experienced lifter can spot muscle imbalances. But no single app brought all of that together in a way that was simple, personal, and useful mid-workout.</p>
+
+  <p>That's where REPPIT comes in! Every strength standard, form cue, and coaching tip in the app comes from hands-on training and science-based study — not generic content.</p>
+
+  <p>80% of REPPIT was ideated, designed, and coded on the cloud with Claude Code — during MRT commutes on a mobile browser.</p>
+
+  <hr>
+
+  <h2>Strength Standards That Scale With You</h2>
+
+  <p>Every exercise in REPPIT has four levels: <strong>Beginner → Novice → Intermediate → Advanced</strong>. The thresholds aren't fixed numbers — they're multipliers based on your body weight and sex.</p>
+
+  <p><strong>Example:</strong></p>
+  <ul>
+    <li>A 75kg male bench pressing 80kg → Intermediate level</li>
+    <li>A 60kg female bench pressing 42kg → Intermediate level (adjusted with female-specific multipliers sourced from StrengthLevel.com)</li>
+  </ul>
+
+  <figure class="screenshot">
+    <img src="screenshots/strength-standards.jpeg" alt="Strength Standards">
+    <figcaption>Squat — level thresholds, PR celebration, warm-up sets, form tip, TARGET column</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>77 Exercises Across 6 Body Parts</h2>
+
+  <table>
+    <thead>
+      <tr><th>Body Part</th><th>Count</th><th>Examples</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Chest</strong></td><td>10</td><td>Bench Press, Incline Bench, Cable Fly, Pec Deck</td></tr>
+      <tr><td><strong>Back</strong></td><td>11</td><td>Deadlift, Barbell Row, Lat Pulldown, Pull-ups</td></tr>
+      <tr><td><strong>Shoulders</strong></td><td>12</td><td>Shoulder Press, Side Laterals, Face Pull, Arnold Press</td></tr>
+      <tr><td><strong>Legs</strong></td><td>15</td><td>Squat, Leg Press, Romanian Deadlift, Hip Thrust</td></tr>
+      <tr><td><strong>Arms</strong></td><td>15</td><td>Bicep Curl, Tricep Pushdown, Hammer Curl, Skull Crushers</td></tr>
+      <tr><td><strong>Core</strong></td><td>10</td><td>Hanging Leg Raise, Cable Woodchop, Ab Rollout</td></tr>
+    </tbody>
+  </table>
+
+  <p>Each exercise has dual multiplier sets (male/female) and four difficulty levels with auto-detection logic.</p>
+
+  <hr>
+
+  <h2>Smart Workout Intelligence</h2>
+
+  <p>This is where REPPIT separates from typical loggers.</p>
+
+  <h3>Auto-Level Detection</h3>
+  <p>Hit a new PR that crosses the next threshold? The app <strong>automatically upgrades your level</strong>. No manual clicking. It also <strong>downgrades intelligently</strong> — but only if you haven't hit your level threshold in the last 4 workouts. This prevents both knee-jerk downgrades from a single bad session and inflation from retaining outdated levels.</p>
+
+  <h3>Smart TARGET Column</h3>
+  <p>The app suggests optimal weights and reps for today based on your actual workout history. It uses <strong>pyramid progression</strong> (heavier weight = fewer reps per set) and respects the <strong>fatigue principle</strong> — it won't suggest more reps in Set 3 than Set 2 at the same weight.</p>
+
+  <h3>One-Tap Copy</h3>
+  <p>See a suggestion you like? One tap copies it to today's log. Spend 30 seconds logging a workout, not 5 minutes calculating progression.</p>
+
+  <figure class="screenshot">
+    <img src="screenshots/workout-logger.jpeg" alt="Workout Logger">
+    <figcaption>Shoulder Press — last session, today's input, TARGET suggestions, timer, warm-up sets</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>7 Predefined Workout Programs</h2>
+
+  <ol>
+    <li><strong>Push-Pull-Legs</strong> (6 days/week) — Classic split for intermediate lifters</li>
+    <li><strong>Upper/Lower</strong> (4 days/week) — For busy schedules</li>
+    <li><strong>Bro Split</strong> (5 days/week) — One body part per day</li>
+    <li><strong>Full Body</strong> (3 days/week) — Compound focus, minimal equipment</li>
+    <li><strong>Upper/Lower Strength/Hypertrophy</strong> — Alternates training goals</li>
+    <li><strong>Custom Routines</strong> — Build your own</li>
+  </ol>
+
+  <p>Each routine comes with 6-8 pre-selected exercises per day. Users can add any exercise from the full 77-exercise library to any workout day, toggle exercises on/off, and the app remembers your custom selections per routine.</p>
+
+  <figure class="screenshot">
+    <img src="screenshots/Training program setup.jpeg" alt="Training Program">
+    <figcaption>Push-Pull-Legs — Push A (Chest focus) and Pull A (Back focus) with exercise chips</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>Daily Workout Summaries</h2>
+
+  <ul>
+    <li>Exercises completed and sets logged</li>
+    <li>Total volume and estimated calorie burn</li>
+    <li>Comparison against your previous session</li>
+    <li>Volume distribution by body part</li>
+  </ul>
+
+  <figure class="screenshot">
+    <img src="screenshots/EOD summary.jpeg" alt="Day Summary">
+    <figcaption>Dec 3 — 3 exercises, 9 sets, 5846kg volume, 105 kcal, body part split</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>Progress Visualization</h2>
+
+  <h3>Muscle Heatmap</h3>
+  <p>A front/back body visualization showing muscle distribution by completed sets. Colour-coded from no activity to heavy — see which muscles are getting work and which are being neglected.</p>
+
+  <h3>Exercise Progression</h3>
+  <p>Line charts tracking weight increases over time for individual exercises. Each chart shows the progression curve with exact weights at each data point and total progress gained.</p>
+
+  <div class="screenshot-trio">
+    <figure>
+      <img src="screenshots/muscle heatmap.jpeg" alt="Muscle Heatmap">
+      <figcaption>Muscle distribution — front &amp; back</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/radar.jpeg" alt="Body Part Balance &amp; PRs">
+      <figcaption>PRs, BMI, body part balance radar</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/progress 2.jpeg" alt="Exercise Progression">
+      <figcaption>Deadlift, Shoulder Press, Barbell Row progression</figcaption>
+    </figure>
+  </div>
+
+  <hr>
+
+  <h2>The Details That Matter in the Gym</h2>
+
+  <h3>Smart Rest Timer</h3>
+  <ul>
+    <li><strong>Per-exercise memory</strong>: Rested 2:30 on Bench Press last time? The timer defaults to 2:30 next time</li>
+    <li>Quick presets: 0:30 to 5:00</li>
+    <li>±15s fine-tuning buttons</li>
+    <li>Sound + vibration alerts</li>
+    <li>Full-screen mode with landscape support — flashes and beeps as rest time runs out so you never miss the cue</li>
+    <li>Warning alert configurable (15s, 30s, 45s, 60s before end)</li>
+    <li>Auto-start after logging a set</li>
+    <li>Keep-screen-on during workouts (wake lock)</li>
+  </ul>
+
+  <figure class="screenshot">
+    <img src="screenshots/Settings and customizations.jpeg" alt="Timer Settings">
+    <figcaption>Timer settings — presets, alerts, auto-start, keep screen awake, warning alert</figcaption>
+  </figure>
+
+  <h3>8 Achievement Badges</h3>
+  <p>Quality-based, not grind-based: from First Step (rate your first exercise) to Elite Status (achieve 100 Strength Score). No gates requiring you to rate a minimum number of exercises — depth over breadth.</p>
+
+  <h3>Coaching Tips</h3>
+  <p>Two systems working together:</p>
+  <ul>
+    <li><strong>Form cues</strong> — Level-specific tips per exercise, rotating daily. "Pause at bottom for 1-2 seconds to build strength" (intermediate squat), "Pull slack out of bar before lift" (intermediate deadlift).</li>
+    <li><strong>Profile-aware advice</strong> — Detects body part imbalances and guides what to work on next. "Weak shoulders: Focus on shoulders exercises to balance your strength profile."</li>
+  </ul>
+
+  <h3>112 Motivational Quotes</h3>
+  <p>Spanning motivation (Schwarzenegger, Bruce Lee), muscle science (hypertrophy, recovery), and benefit facts (mental health, longevity).</p>
+
+  <hr>
+
+  <h2>UX Decisions</h2>
+
+  <ul>
+    <li><strong>Unit toggle</strong>: Seamlessly switch kg ↔ lbs with automatic conversions</li>
+    <li><strong>Dark mode</strong>: For bright gym lighting</li>
+    <li><strong>Offline-first</strong>: All data stays on your phone. No cloud account required, no subscription, no data sales</li>
+    <li><strong>Google sign-in</strong>: Available for cloud sync when online</li>
+    <li><strong>Mobile-first design</strong>: Built for phone-in-hand gym use</li>
+    <li><strong>BMI + Calorie Advisor</strong>: Cut (-500), maintain, or bulk (+300) with exact daily calorie numbers</li>
+  </ul>
+
+  <hr>
+
+  <h2>Coming Next</h2>
+
+  <ul>
+    <li><strong>Google Play Store</strong> — coming soon (currently in closed testing)</li>
+    <li><strong>Transformation photo tracker</strong> with ghost overlay for consistent before/after shots</li>
+    <li><strong>Multi-profile support</strong> — track up to 5 family members, gym partners, or clients</li>
+  </ul>
+
+  <hr>
+
+  <h2>The Rough Edges — What Didn't Go Smoothly</h2>
+
+  <p>Not everything was butter smooth. Three pain points worth sharing:</p>
+
+  <h3>Google Authentication</h3>
+  <p>Setting up Google sign-in turned into a multi-day blocker. The OAuth configuration across Supabase, Google Cloud Console, and Capacitor's Android WebView had edge cases that AI-assisted development couldn't resolve directly. Redirect URIs, SHA-1 fingerprints, and deep linking all had to be debugged manually — the kind of platform-specific plumbing where documentation is scattered and error messages are cryptic. Eventually got it working, but it consumed significantly more time than the feature warranted.</p>
+
+  <h3>Google Play Closed Testing Requirements</h3>
+  <p>Google requires <strong>at least 12 active testers over 14 consecutive days</strong> with continuous feedback before an app can be approved for production release. For a solo developer without a large beta audience, this is a real hurdle. Recruiting testers who will actively use the app daily for two weeks — not just install and forget — is harder than building the app itself. Still working on meeting this threshold.</p>
+
+  <h3>Mobile Web Development Hit a Wall</h3>
+  <p>80% of REPPIT was ideated, designed, and coded on the cloud with Claude Code — during MRT commutes on a mobile browser. It worked brilliantly for most of the build. But towards the tail end of that 80%, the mobile web interface became painfully slow and nearly inoperable. Context windows grew large, responses lagged, and the browser struggled to keep up. The final 20% had to move back to desktop. Cloud-first mobile development is powerful — but it has a ceiling, and I hit it.</p>
+
+  <p>These aren't complaints — they're the reality of shipping a real product. The code is the easy part. Distribution is where solo projects get tested.</p>
+
+  <hr>
+
+  <h2>Tech Stack</h2>
+
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Technology</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Framework</td><td>Next.js 16 (App Router + Turbopack)</td></tr>
+      <tr><td>Language</td><td>TypeScript (strict mode)</td></tr>
+      <tr><td>Styling</td><td>Tailwind CSS 4</td></tr>
+      <tr><td>Mobile</td><td>Capacitor 8 (Android builds)</td></tr>
+      <tr><td>Storage</td><td>localStorage + IndexedDB</td></tr>
+      <tr><td>Animations</td><td>Framer Motion</td></tr>
+      <tr><td>Visualization</td><td>react-body-highlighter (muscle heatmap)</td></tr>
+      <tr><td>Hosting</td><td>Google Play (Android)</td></tr>
+    </tbody>
+  </table>
+
+  <p>Built with Claude Code as pair programmer, following a 9-step development workflow with specialized AI agents for requirements, architecture, and test planning.</p>
+
+  <p>→ <a href="https://www.linkedin.com/pulse/clarity-clutter-why-ai-assisted-development-needs-arun-castromin-hmxzc/">Read about the 9-step workflow</a></p>
+
+  <hr>
+
+  <h2>By the Numbers</h2>
+
+  <table>
+    <thead>
+      <tr><th>Metric</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Exercises</td><td>77 across 6 body parts</td></tr>
+      <tr><td>Difficulty levels</td><td>4 with auto-detection</td></tr>
+      <tr><td>Workout programs</td><td>7 predefined + custom</td></tr>
+      <tr><td>Achievement badges</td><td>8 (quality-based)</td></tr>
+      <tr><td>Motivational quotes</td><td>112 across 3 categories</td></tr>
+      <tr><td>PR celebration messages</td><td>10 variations</td></tr>
+      <tr><td>Account required</td><td>No (fully functional offline)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Try REPPIT</h2>
+    <p style="margin-bottom: 20px;">Android only — download the APK and install directly on your phone.</p>
+    <div class="cta-qr">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fgithub.com%2Fcastroarun%2FREPPIT%2Fraw%2Fmain%2FREPPIT-v1.1.0.apk&format=png" alt="Scan to download REPPIT APK">
+      <p style="font-size: 13px; color: #64748b; margin-top: 8px;">Scan to download</p>
+    </div>
+    <a href="https://github.com/castroarun/REPPIT/raw/main/REPPIT-v1.1.0.apk" class="cta-link">Download APK →</a>
+    <p style="margin-top: 16px; font-size: 14px; color: #64748b;"><strong>Play Store:</strong> Coming soon — currently in closed testing</p>
+    <p style="font-size: 14px; color: #64748b;"><strong>GitHub:</strong> <a href="https://github.com/castroarun/REPPIT">github.com/castroarun/REPPIT</a></p>
+  </div>
+
+  <p style="text-align: center; margin-top: 32px; font-size: 18px;"><strong>What's your method for knowing if you're actually getting stronger — or just lifting heavier?</strong></p>
+
+  <!-- Author -->
+  <div class="author-card">
+    <img src="../public/avatars/arun.jpg" alt="Arun" class="author-avatar">
+    <div class="author-info">
+      <div class="author-name">Arun Castromin</div>
+      <div class="author-handle">@castronix</div>
+      <div class="author-bio">Building digital products with clarity, performance, and obsessive attention to detail.</div>
+      <div class="author-links">
+        <a href="https://www.linkedin.com/in/aruncastromin">LinkedIn</a>
+        <a href="https://github.com/castroarun">GitHub</a>
+        <a href="https://castroarun.github.io/portfolio/resume/">Portfolio</a>
+        <a href="https://x.com/MetricsTrader">X</a>
+      </div>
+    </div>
+  </div>
+
+</article>
+
+<footer class="footer">
+  <p>Built in public by <a href="https://castroarun.github.io/portfolio/resume/">castronix</a></p>
+  <p style="margin-top: 8px;">
+    <a href="https://www.linkedin.com/in/aruncastromin">LinkedIn</a> &middot;
+    <a href="https://github.com/castroarun">GitHub</a> &middot;
+    <a href="https://castroarun.github.io/portfolio/resume/">castronix.dev</a> &middot;
+    <a href="https://x.com/MetricsTrader">X</a>
+  </p>
+  <p style="margin-top: 12px;">#buildinpublic #fitness #strengthtraining #nextjs #typescript #pwa #mobiledev</p>
+</footer>
+
+</body>
+</html>
