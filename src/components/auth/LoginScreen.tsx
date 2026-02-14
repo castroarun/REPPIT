@@ -73,16 +73,11 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
 
     if (error) {
       setIsLoading(false)
-      if (error.message.includes('expired') || error.message.includes('invalid')) {
-        setError('Code expired or invalid. Tap "Resend code" for a new one.')
-      } else {
-        setError(error.message)
-      }
+      setError(error.message)
       setOtpCode('')
     } else {
       setIsLoading(false)
     }
-    // Success - AuthContext will update and redirect automatically
   }
 
   const handleResend = async () => {
@@ -122,11 +117,7 @@ export function LoginScreen({ onSkip }: LoginScreenProps) {
 
     if (error) {
       setIsLoading(false)
-      if (error.message.includes('expired') || error.message.includes('invalid')) {
-        setError('Code expired or invalid. Tap "Resend code" for a new one.')
-      } else {
-        setError(error.message)
-      }
+      setError(error.message)
       hasAutoSubmitted.current = false
       setOtpCode('')
     } else {
