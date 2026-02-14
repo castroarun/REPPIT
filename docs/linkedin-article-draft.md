@@ -1,6 +1,6 @@
 # REPPIT — A Strength Tracker Built From the Gym Floor
 
-Two intense years of weight training — not casual gym visits, but disciplined, consistent work. Tracking lifts, following science-based programming, applying progressive overload rigorously, experimenting with routines, and eventually coaching friends at the gym through their own training.
+Two intense years of weight training — not casual gym visits, but disciplined, consistent work. Tracking lifts, following science-based programming, applying progressive overload rigorously, experimenting with routines, and eventually coaching friends at the gym.
 
 The same questions kept coming up: "Am I lifting enough for my body weight?" "What level am I actually at?" "Why is my bench decent but my squat lagging behind?"
 
