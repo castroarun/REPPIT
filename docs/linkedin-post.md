@@ -21,7 +21,7 @@
 ```
 Most people I know treat weight training as something "gym people" do. But science says that muscle is the single most critical organ for longevity. Bone density declines without load. Joints weaken without resistance. In a world of desk jobs and sedentary routines, push-pull-carry isn't a hobby — it's basic necessity.
 
-𝗠𝗼𝘀𝘁 𝘄𝗼𝗿𝗸𝗼𝘂𝘁 𝗮𝗽𝗽𝘀 𝘁𝗿𝗮𝗰𝗸 𝘄𝗵𝗮𝘁 𝘆𝗼𝘂 𝗹𝗶𝗳𝘁𝗲𝗱. 𝗥𝗘𝗣𝗣𝗜𝗧 𝘁𝗲𝗹𝗹𝘀 𝘆𝗼𝘂 𝘄𝗵𝗲𝗿𝗲 𝘆𝗼𝘂 𝘀𝘁𝗮𝗻𝗱.
+𝗠𝗼𝘀𝘁 𝘄𝗼𝗿𝗸𝗼𝘂𝘁 𝗮𝗽𝗽𝘀 𝘁𝗿𝗮𝗰𝗸 𝘄𝗵𝗮𝘁 𝘆𝗼𝘂 𝗹𝗶𝗳𝘁𝗲𝗱. 𝗥𝗘𝗣𝗣𝗜𝗧 𝘁𝗲𝗹𝗹𝘀 𝘆𝗼𝘂 𝘄𝗵𝗲𝗿𝗲 𝘆𝗼𝘂 𝘀𝘁𝗮𝗻𝗱 — 𝗮𝗻𝗱 𝘄𝗵𝗮𝘁 𝘁𝗼 𝘁𝗮𝗿𝗴𝗲𝘁 𝗻𝗲𝘅𝘁.
 
 A 70kg bench press means something different for a 60kg person and a 100kg person. REPPIT knows the difference.
 
