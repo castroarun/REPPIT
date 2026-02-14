@@ -1,232 +1,218 @@
-# A 9-Step Development Workflow Using AI Agents
+# REPPIT — A Strength Tracker Built From the Gym Floor
 
-**Most solo developers are still doing everything manually.**
+Two intense years of weight training — not casual gym visits, but disciplined, consistent work. Tracking lifts, following science-based programming, studying progressive overload, experimenting with routines, and eventually helping friends at the gym figure out their own training.
 
-Requirements gathering. Architecture design. Test planning. Documentation. All bottlenecks that slow down what should be fast: shipping working software.
+The same questions kept coming up: "Am I lifting enough for my body weight?" "What level am I actually at?" "Why is my bench decent but my squat lagging behind?"
 
-This article breaks down an AI-powered development system that handles 80% of the typical workflow. Here's exactly how it works.
+The information exists — StrengthLevel.com publishes body-weight multipliers, research backs progressive overload principles, and any experienced lifter can spot muscle imbalances. But no single app brought all of that together in a way that was simple, personal, and useful mid-workout.
 
-[SCREENSHOT: ecosystem-diagram.png - The complete Claude Code agent ecosystem showing inputs, agents, commands, and outputs]
+That's where REPPIT comes in! Every strength standard, form cue, and coaching tip in the app comes from hands-on training and science-based study — not generic content.
 
----
+80% of REPPIT was ideated, designed, and coded on the cloud with Claude Code — during MRT commutes on a mobile browser.
 
-## The Problem: The Default Way Doesn't Scale
-
-The patterns that slow developers down are well-known:
-
-- **Vague requirements** lead to rework
-- **No design docs** mean inconsistent architecture
-- **Test cases written after bugs** appear
-- **Zero documentation** for future maintenance
-
-The goal: a system that prevents these problems before they start.
+![REPPIT Dashboard — Profile overview with strength score, coach tip, and exercise levels](docs/screenshots/hero-dashboard.jpeg)
 
 ---
 
-## The Solution: Specialized AI Agents
+## The Core Idea: Strength Standards That Scale With You
 
-The approach: a team of specialized AI agents - each with a defined role, specific deliverables, and clear handover points between them. Think TOGAF principles applied to AI: structured phases, defined outputs, and explicit "Definition of Done" before moving to the next stage.
+Every exercise in REPPIT has four levels: **Beginner → Novice → Intermediate → Advanced**. The thresholds aren't fixed numbers — they're multipliers based on your body weight and sex.
 
-### Agent 1: @designer (Requirements Analyst)
+**Example:**
+- A 75kg male bench pressing 80kg → Intermediate level
+- A 60kg female bench pressing 42kg → Intermediate level (adjusted with female-specific multipliers sourced from StrengthLevel.com)
 
-Before any design work begins, this agent conducts deep research:
-- Performs fitment study to validate project scope and feasibility
-- Identifies best practices and common patterns for the project type
-- Researches similar projects, GitHub repos, and existing implementations
-- Asks methodical questions to capture complete requirements
-
-**Output:** A structured requirements document covering:
-- Project type, purpose, and target users
-- Design system preferences
-- Page structure and navigation
-- Components needed
-- Technical stack decisions
-
-**Key insight:** The designer agent uses the Opus model for complex reasoning. It doesn't assume - it asks until requirements are complete.
-
-[SCREENSHOT: designer-questions.png - Terminal showing @designer asking methodical questions about project requirements]
-
-### Agent 2: @architect (System Designer)
-
-With requirements captured, the architect takes over with a two-phase approach:
-
-**Phase 1: Discovery**
-- Reviews requirements
-- Proposes 2-3 implementation approaches
-- Presents trade-offs for each option
-- Waits for human approval before proceeding
-
-**Phase 2: PRD Creation**
-- Creates detailed Product Requirements Document
-- Generates visual workflow diagrams (Draw.io format)
-- Creates HTML mockups with Tailwind CSS
-- Submits everything for human review via Jira
-
-The PRD includes database schemas, API structures, component hierarchies, state management strategy, and a task breakdown with complexity estimates.
-
-[SCREENSHOT: architect-prd-snippet.png - Section of APP_PRD.md showing database schema and component breakdown]
-
-[SCREENSHOT: html-mockup-browser.png - HTML mockup rendered in browser showing the actual UI design]
-
-### Agent 3: @qa (Test Plan Creator)
-
-Here's the counterintuitive part: test cases come BEFORE development.
-
-The QA agent reads the approved PRD and generates comprehensive test cases:
-- Positive tests (happy path)
-- Negative tests (error handling)
-- Boundary tests (edge values)
-
-Each test case includes specific steps, expected behavior, test data, and priority level. The output is a CSV file that tracks execution during manual testing.
-
-**Why test before code?** It validates understanding. Forces clarity on requirements. Catches gaps before any code is written.
-
-[SCREENSHOT: test-plan-csv.png - TEST-PLAN.csv showing actual test cases with IDs, steps, and expected results]
+![Strength Standards — Squat card showing level thresholds, PR celebration, warm-up sets, form tip, and workout logger with TARGET column](docs/screenshots/strength-standards.jpeg)
 
 ---
 
-## The 9-Step Workflow
+## 77 Exercises Across 6 Body Parts
 
-These agents fit into a structured development process:
+The exercise library covers the full spectrum of strength training:
 
-| Step | Activity | Agent | Output |
-|------|----------|-------|--------|
-| 1 | DEV-CLOCK Setup | - | Time tracking document |
-| 2 | PRD & Design | @architect | APP_PRD.md, workflow.drawio |
-| 3 | Test Cases | @qa | TEST-PLAN.csv |
-| 4 | Build | Claude Code | Working code |
-| 5 | Manual Testing | Human | Test execution results |
-| 6 | Debug & Feedback | Claude Code | Bug fixes |
-| 7 | Code Walkthrough | @walkthrough | WALKTHROUGH.md |
-| 8 | Ship | Deploy scripts | Live application |
-| 9 | Time Retrospective | - | Lessons learned |
+| Body Part | Exercises | Examples |
+|-----------|-----------|----------|
+| **Chest** | 10 | Bench Press, Incline Bench, Cable Fly, Pec Deck |
+| **Back** | 11 | Deadlift, Barbell Row, Lat Pulldown, Pull-ups |
+| **Shoulders** | 12 | Shoulder Press, Side Laterals, Face Pull, Arnold Press |
+| **Legs** | 15 | Squat, Leg Press, Romanian Deadlift, Hip Thrust |
+| **Arms** | 15 | Bicep Curl, Tricep Pushdown, Hammer Curl, Skull Crushers |
+| **Core** | 10 | Hanging Leg Raise, Cable Woodchop, Ab Rollout |
 
-**The critical rule:** No coding without an approved design. No coding without a test plan.
-
-Human approval gates at Steps 2, 3, and 8 ensure AI proposals get validated before investment. As Barry Boehm's research showed: fixing a defect in requirements costs 1x, in design 5x, in coding 10x, in testing 20x, and in production 100x. The gates catch deviations at the lowest-cost phase.
+Each exercise has dual multiplier sets (male/female) and four difficulty levels with auto-detection logic.
 
 ---
 
-## The Review Loop: Jira Integration
+## Smart Workout Intelligence
 
-The workflow integrates with Jira for structured reviews.
+This is where REPPIT separates from typical loggers.
 
-When @architect completes a PRD:
-1. Creates a Jira task: "Review PRD: [Feature]"
-2. Attaches PRD document, workflow diagram, and mockups
-3. Assigns to the reviewer
+### Auto-Level Detection
+Hit a new PR that crosses the next threshold? The app **automatically upgrades your level**. No manual clicking. It also **downgrades intelligently** — but only if you haven't hit your level threshold in the last 4 workouts. This prevents both knee-jerk downgrades from a single bad session and inflation from retaining outdated levels.
 
-The review process:
-- Add comments describing changes needed
-- Keep status as "In Review"
-- Run `/checkprd` command
+### Smart TARGET Column
+The app suggests optimal weights and reps for today based on your actual workout history. It uses **pyramid progression** (heavier weight = fewer reps per set) and respects the **fatigue principle** — it won't suggest more reps in Set 3 than Set 2 at the same weight.
 
-The architect reads feedback, revises the PRD, and resubmits. This loop continues until approval.
+### One-Tap Copy
+See a suggestion you like? One tap copies it to today's log. Spend 30 seconds logging a workout, not 5 minutes calculating progression.
 
-When approved:
-- Move Jira task to "Done"
-- Architect automatically creates Epic, Stories, and Tasks
-- Development begins with full traceability
-
-[SCREENSHOT: jira-prd-review.png - Jira task "Review PRD: [Feature]" with attached documents and review comments]
+![Workout Logger — Shoulder Press with last session, today's input, TARGET suggestions, timer, and warm-up sets](docs/screenshots/workout-logger.jpeg)
 
 ---
 
-## Real Example: Strength Profile Tracker
+## 7 Predefined Workout Programs
 
-A fitness tracking PWA built using this workflow.
+Built-in routines with balanced exercise distribution:
 
-**Step 2 output:** PRD covering profile management, exercise tracking, strength calculations, and progress visualization. Architect created HTML mockups for each screen.
+1. **Push-Pull-Legs** (6 days/week) — Classic split for intermediate lifters
+2. **Upper/Lower** (4 days/week) — For busy schedules
+3. **Bro Split** (5 days/week) — One body part per day
+4. **Full Body** (3 days/week) — Compound focus, minimal equipment
+5. **Upper/Lower Strength/Hypertrophy** — Alternates training goals
+6. **Custom Routines** — Build your own
 
-**Step 3 output:** 50+ test cases covering CRUD operations, validation rules, data persistence, and UI components. Priority P0 tests defined the "smoke test" suite.
+Each routine comes with 6-8 pre-selected exercises per day. Users can add any exercise from the full 77-exercise library to any workout day, toggle exercises on/off, and the app remembers your custom selections per routine.
 
-**Step 4:** Built with Next.js, TypeScript, Tailwind CSS. The approved design made implementation straightforward - no architectural debates mid-sprint.
-
-**Step 5:** Executed test plan. Found 3 edge cases. Logged as Jira bugs linked to specific test case IDs.
-
-**Result:** A fully-tested PWA with comprehensive documentation. Every requirement traced from initial capture through deployment.
-
-[SCREENSHOT: spt-app-running.png - Strength Profile Tracker PWA running on mobile showing the actual interface]
-
-[SCREENSHOT: docs-folder-structure.png - docs/ folder showing APP_PRD.md, TEST-PLAN.csv, WALKTHROUGH.md, and mockups/]
+![Training Program — Push-Pull-Legs with Push A (Chest focus) and Pull A (Back focus) workout days, exercise chips with + Add option](docs/screenshots/Training%20program%20setup.jpeg)
 
 ---
 
-## Why This System Exists: Retrospective Learnings
+## Daily Workout Summaries
 
-The DEV-CLOCK tracks time across phases. The retrospective (Step 9) analyzes where time actually went. These insights from earlier projects shaped the current workflow:
+After each session, REPPIT generates a summary with:
+- Exercises completed and sets logged
+- Total volume and estimated calorie burn
+- Comparison against your previous session
+- Volume distribution by body part
 
-[SCREENSHOT: retro-flow-diagram.png - Three-lane flow showing: Root Cause → Pain Point → Solution for each friction point]
-
-```
-┌─────────────────────┐     ┌──────────────────────────┐     ┌─────────────────────────────┐
-│     ROOT CAUSE      │ ──▶ │       PAIN POINT         │ ──▶ │        SOLUTION             │
-├─────────────────────┤     ├──────────────────────────┤     ├─────────────────────────────┤
-│ Jumped to code      │     │ 70% time firefighting    │     │ @designer + @architect      │
-│ without validated   │     │ bugs during build        │     │ agents with structured      │
-│ requirements        │     │                          │     │ outputs                     │
-├─────────────────────┤     ├──────────────────────────┤     ├─────────────────────────────┤
-│ Context scattered   │     │ Couldn't recall where    │     │ /jirastatus command for     │
-│ across chat         │     │ execution halted or      │     │ project summary and         │
-│ history             │     │ decisions made           │     │ phase tracking              │
-├─────────────────────┤     ├──────────────────────────┤     ├─────────────────────────────┤
-│ Reviews mixed with  │     │ Scrolling documents,     │     │ Jira integration for        │
-│ development         │     │ asking "which file?"     │     │ external review and         │
-│ workflow            │     │ repeatedly               │     │ decision-making             │
-└─────────────────────┘     └──────────────────────────┘     └─────────────────────────────┘
-```
-
-**This isn't theoretical architecture - every component solves a problem that actually happened.** The retrospective phase ensures friction points become system improvements, not recurring issues.
+![Day Summary — Dec 3 session showing 3 exercises, 9 sets, 5846kg volume, 105 kcal, and volume split by body part](docs/screenshots/EOD%20summary.jpeg)
 
 ---
 
-## Key Takeaways
+## Progress Visualization
 
-### 1. Specialization beats generalization
+### Muscle Heatmap
+A front/back body visualization showing muscle distribution by completed sets. Colour-coded from no activity to heavy — see which muscles are getting work and which are being neglected.
 
-One agent doing everything produces mediocre outputs. Specialized agents with defined responsibilities produce expert-level work in their domain.
+![Muscle Distribution — Front and back body view with completed sets per muscle group, from Glutes (474) to Traps (158)](docs/screenshots/muscle%20heatmap.jpeg)
 
-### 2. Human gates matter
+### Exercise Progression
+Line charts tracking weight increases over time for individual exercises. Each chart shows the progression curve with exact weights at each data point and total progress gained.
 
-AI proposes, human approves. The review loops aren't overhead - they're quality control. They catch wrong assumptions before they become wrong code.
-
-### 3. Documentation is a product
-
-The PRD, test plan, and walkthrough aren't bureaucracy. They're deliverables that make the codebase maintainable.
-
-### 4. Front-loaded effort saves time
-
-Spending time on requirements and design feels slow. But it's faster than refactoring half-built features because something obvious was missed.
+![Exercise Progression — Deadlift (+2kg), Shoulder Press (+1.5kg), and Barbell Row (+7kg) progression charts over weeks](docs/screenshots/progress%202.jpeg)
 
 ---
 
-## Implementation Details
+## The Details That Matter in the Gym
 
-This system runs on Claude Code with custom agents and slash commands. The core components:
+### Smart Rest Timer
+- **Per-exercise memory**: Rested 2:30 on Bench Press last time? The timer defaults to 2:30 next time
+- Quick presets: 0:30 to 5:00
+- ±15s fine-tuning buttons
+- Sound + vibration alerts
+- Full-screen mode with landscape support — flashes and beeps as rest time runs out so you never miss the cue
+- Warning alert configurable (15s, 30s, 45s, 60s before end)
+- Auto-start after logging a set
+- Keep-screen-on during workouts (wake lock)
 
-**Agents** (stored in `~/.claude/agents/`):
-- `designer.md` - Requirements gathering
-- `architect.md` - PRD and design
-- `qa.md` - Test case generation
-- `walkthrough.md` - Documentation
+![Timer Settings — Default rest presets, sound/vibration alerts, auto-start toggle, keep screen awake, and warning alert options](docs/screenshots/Settings%20and%20customizations.jpeg)
 
-**Commands** (stored in `~/.claude/commands/`):
-- `/newproject` - Initialize project templates
-- `/checkprd` - Check Jira review status
-- `/jirastatus` - View sprint progress
+### 8 Achievement Badges
+Quality-based, not grind-based:
+- First Step (rate your first exercise) → Elite Status (achieve 100 Strength Score)
+- No gates requiring you to rate a minimum number of exercises — depth over breadth
 
-**Integration:**
-- MCP server for Jira (mcp-atlassian)
-- Git for version control (including agent configs)
+### Coaching Tips
+Two systems working together:
+- **Form cues** — Level-specific tips per exercise, rotating daily. "Pause at bottom for 1-2 seconds to build strength" (intermediate squat), "Pull slack out of bar before lift" (intermediate deadlift).
+- **Profile-aware advice** — Detects body part imbalances and guides what to work on next. "Weak shoulders: Focus on shoulders exercises to balance your strength profile."
 
-Start simple: Create one specialized agent for the biggest bottleneck. Document its responsibilities, inputs, and expected outputs. Iterate from there.
+### 112 Motivational Quotes
+Spanning motivation (Schwarzenegger, Bruce Lee), muscle science (hypertrophy, recovery), and benefit facts (mental health, longevity).
 
 ---
 
-**What's your biggest bottleneck in solo development?**
+## UX Decisions
 
-Drop a comment with your approach - or the problem you're still trying to solve.
+- **Unit toggle**: Seamlessly switch kg ↔ lbs with automatic conversions
+- **Dark mode**: For bright gym lighting
+- **Offline-first**: All data stays on your phone. No cloud account required, no subscription, no data sales
+- **Google sign-in**: Available for cloud sync when online
+- **Mobile-first design**: Built for phone-in-hand gym use
+- **BMI + Calorie Advisor**: Cut (-500), maintain, or bulk (+300) with exact daily calorie numbers
 
 ---
 
-*Building in public at github.com/castroarun*
+## Coming Next
+
+- **Google Play Store** — coming soon (currently in closed testing)
+- **Transformation photo tracker** with ghost overlay for consistent before/after shots
+- **Multi-profile support** — track up to 5 family members, gym partners, or clients
+
+---
+
+## The Rough Edges — What Didn't Go Smoothly
+
+Not everything was butter smooth. Three pain points worth sharing:
+
+### Google Authentication
+Setting up Google sign-in turned into a multi-day blocker. The OAuth configuration across Supabase, Google Cloud Console, and Capacitor's Android WebView had edge cases that AI-assisted development couldn't resolve directly. Redirect URIs, SHA-1 fingerprints, and deep linking all had to be debugged manually — the kind of platform-specific plumbing where documentation is scattered and error messages are cryptic. Eventually got it working, but it consumed significantly more time than the feature warranted.
+
+### Google Play Closed Testing Requirements
+Google requires **at least 12 active testers over 14 consecutive days** with continuous feedback before an app can be approved for production release. For a solo developer without a large beta audience, this is a real hurdle. Recruiting testers who will actively use the app daily for two weeks — not just install and forget — is harder than building the app itself. Still working on meeting this threshold.
+
+### Mobile Web Development Hit a Wall
+80% of REPPIT was ideated, designed, and coded on the cloud with Claude Code — during MRT commutes on a mobile browser. It worked brilliantly for most of the build. But towards the tail end of that 80%, the mobile web interface became painfully slow and nearly inoperable. Context windows grew large, responses lagged, and the browser struggled to keep up. The final 20% had to move back to desktop. Cloud-first mobile development is powerful — but it has a ceiling, and I hit it.
+
+These aren't complaints — they're the reality of shipping a real product. The code is the easy part. Distribution is where solo projects get tested.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 (App Router + Turbopack) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS 4 |
+| Mobile | Capacitor 8 (Android builds) |
+| Storage | localStorage + IndexedDB |
+| Animations | Framer Motion |
+| Visualization | react-body-highlighter (muscle heatmap) |
+| Hosting | Google Play (Android) |
+
+Built with Claude Code as pair programmer, following a 9-step development workflow with specialized AI agents for requirements, architecture, and test planning.
+
+→ [Read about the 9-step workflow](https://www.linkedin.com/pulse/clarity-clutter-why-ai-assisted-development-needs-arun-castromin-hmxzc/)
+
+---
+
+## By the Numbers
+
+| Metric | Value |
+|--------|-------|
+| Exercises | 77 across 6 body parts |
+| Difficulty levels | 4 with auto-detection |
+| Workout programs | 7 predefined + custom |
+| Achievement badges | 8 (quality-based) |
+| Motivational quotes | 112 across 3 categories |
+| PR celebration messages | 10 variations |
+| Account required | No (fully functional offline) |
+
+---
+
+## Try It
+
+**Download APK:** [APK_DOWNLOAD_URL]
+**Play Store:** Coming soon — currently in closed testing
+**GitHub:** https://github.com/castroarun/REPPIT
+
+---
+
+**What's your method for knowing if you're actually getting stronger — or just lifting heavier?**
+
+---
+
+*Built in public. Feedback welcome.*
+
+#buildinpublic #fitness #strengthtraining #nextjs #typescript #pwa #mobiledev

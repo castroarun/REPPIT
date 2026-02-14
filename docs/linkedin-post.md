@@ -65,7 +65,7 @@ Scan the QR code in the article to install directly on your Android phone.
 What's your method for knowing if you're actually getting stronger?
 
 — castronix
-linkedin.com/in/aruncastromin | castroarun.github.io/portfolio/resume | github.com/castroarun
+linkedin.com/in/aruncastromin | castroarun.github.io/portfolio/resume | github.com/castroarun/REPPIT
 
 #buildinpublic #fitness #strengthtraining #nextjs #typescript #pwa
 ```

@@ -44,8 +44,8 @@
 ### Repository Details
 
 ```
-Name: strength_profile_app
-URL: https://github.com/castroarun/buildfolio/strength_profile_app (to create)
+Name: REPPIT
+URL: https://github.com/castroarun/REPPIT
 ```
 
 ### Repo Structure
