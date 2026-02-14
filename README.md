@@ -2,6 +2,23 @@
 
 A mobile-first strength tracking app that automatically measures your fitness level and guides your progression. Built with Next.js 16, TypeScript, Tailwind CSS, and Capacitor for Android.
 
+## Download & Install
+
+### Android APK (Direct Download)
+
+1. Download **[REPPIT-v1.1.0.apk](REPPIT-v1.1.0.apk)** from this repo
+2. Transfer the APK to your Android phone (or download directly from GitHub on your phone)
+3. Open the file and tap **Install**
+4. If prompted, enable **"Install from unknown sources"** in your phone's Settings > Security
+
+> **Requirements:** Android 7.0 or higher
+
+### Web App
+
+Use REPPIT directly in your browser — no install needed:
+
+**[reppit-fitness.vercel.app](https://reppit-fitness.vercel.app)**
+
 ## Features
 
 - **Automatic Level Detection**: Calculates your strength level (Beginner, Novice, Intermediate, Advanced) for each exercise based on performance relative to body weight
@@ -178,6 +195,7 @@ All data is stored locally on your device. No account required, no data collecti
 
 ---
 
-**Version**: 1.0.2
-**Last Updated**: 2025-12-28
+**Version**: 1.1.0
+**Last Updated**: 2026-02-14
 **Play Store**: Coming Soon (Closed Testing)
+**Direct Download**: [REPPIT-v1.1.0.apk](REPPIT-v1.1.0.apk)
