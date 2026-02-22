@@ -133,7 +133,8 @@ export function addSetToSession(
   exerciseName: string,
   weight: number,
   reps: number,
-  isWarmup?: boolean
+  isWarmup?: boolean,
+  setIndex?: number
 ): void {
   let session = getSession()
 
@@ -152,8 +153,18 @@ export function addSetToSession(
     }
   }
 
-  // Add the set with timestamp
-  session.exercises[exerciseId].sets.push({ weight, reps, isWarmup, timestamp: now })
+  const entry = { weight, reps, isWarmup, timestamp: now }
+
+  if (setIndex !== undefined) {
+    // Replace existing entry at this index (user re-completed a set after editing)
+    if (setIndex < session.exercises[exerciseId].sets.length) {
+      session.exercises[exerciseId].sets[setIndex] = entry
+    } else {
+      session.exercises[exerciseId].sets.push(entry)
+    }
+  } else {
+    session.exercises[exerciseId].sets.push(entry)
+  }
 
   // Update last activity time
   session.lastActivityTime = now
