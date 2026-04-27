@@ -1,4 +1,57 @@
-# REPPIT - Track Your Reps. Build Your Strength.
+<div align="center">
+
+# REPPIT
+
+**Mobile strength training app — automatic level detection, smart progression, multi-profile**
+
+![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white) ![SQLite](https://img.shields.io/badge/SQLite-local--first-003B57?logo=sqlite&logoColor=white) ![Riverpod](https://img.shields.io/badge/Riverpod-state-4B6FAA) ![Status](https://img.shields.io/badge/Status-Live-22c55e)
+
+</div>
+
+<!-- LAUNCHPAD:START -->
+```json
+{
+  "stage": "live",
+  "progress": 75,
+  "complexity": "F",
+  "lastUpdated": "2026-04-27",
+  "targetDate": null,
+  "nextAction": "PRIMMO AI coach integration",
+  "blocker": null,
+  "demoUrl": null,
+  "techStack": [
+    "Flutter",
+    "Dart",
+    "SQLite",
+    "Riverpod"
+  ],
+  "shipped": true,
+  "linkedinPosted": false
+}
+```
+<!-- LAUNCHPAD:END -->
+
+<details>
+<summary>📚 Table of Contents</summary>
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Roadmap](#roadmap)
+- [License](#license)
+
+</details>
+
+## Features
+
+- Automatic strength-level detection based on lifts relative to bodyweight
+- Smart progression engine with PROGRESS/MAINTAIN logic per session
+- Muscle heatmap visualization across 5 body parts and 23 exercises
+- Full-screen rest timer with wake-lock, sound/vibration alerts
+- Multi-profile (up to 5 users), offline-first, zero registration
+
+## Quick Start
 
 A mobile-first strength tracking app that automatically measures your fitness level and guides your progression. Built with Next.js 16, TypeScript, Tailwind CSS, and Capacitor for Android.
 
@@ -199,3 +252,31 @@ All data is stored locally on your device. No account required, no data collecti
 **Last Updated**: 2026-02-14
 **Play Store**: Coming Soon (Closed Testing)
 **Direct Download**: [REPPIT-v1.1.0.apk](REPPIT-v1.1.0.apk)
+
+## Tech Stack
+
+| Component | Tech |
+|---|---|
+| Flutter | — |
+| Dart | — |
+| SQLite | — |
+| Riverpod | — |
+
+## Roadmap
+
+- [x] Beginner → Elite progression state machine
+- [x] Local-first SQLite with optional sync
+- [x] Multi-profile data isolation
+- [ ] PRIMMO AI coach integration
+
+## License
+
+Private — part of the Castronix portfolio.
+
+<div align="center">
+
+---
+
+<sub>Part of the <a href="https://castronix.dev">Castronix</a> portfolio · crafted with care · © 2026 Arun Castromin</sub>
+
+</div>
