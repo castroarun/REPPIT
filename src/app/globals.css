@@ -103,8 +103,10 @@ html {
 /* Safe area insets for mobile */
 @supports (padding: max(0px)) {
   body {
+    padding-top: env(safe-area-inset-top);
     padding-left: max(0px, env(safe-area-inset-left));
     padding-right: max(0px, env(safe-area-inset-right));
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 

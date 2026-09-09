@@ -467,9 +467,10 @@ export default function WorkoutLogger({ profileId, exerciseId, onLevelUp, onRequ
     setInProgressExercise(exerciseId)
 
     // Add set to workout session (auto-starts session if needed)
+    // Pass setIndex so re-completing an edited set replaces the entry instead of duplicating
     const exerciseInfo = getExerciseById(exerciseId)
     if (exerciseInfo) {
-      addSetToSession(exerciseId, exerciseInfo.name, currentSet.weight, currentSet.reps)
+      addSetToSession(exerciseId, exerciseInfo.name, currentSet.weight, currentSet.reps, undefined, setIndex)
     }
 
     // Mark this set as completed by user and persist to storage
