@@ -208,19 +208,27 @@ declaration is complete.
 6. [ ] **Submit for review.** First-time submissions commonly take several days
    and can take longer.
 
-### Do this BEFORE submitting
+### Device verification — DONE (2026-10-05)
 
-- [ ] **Sideload and test on a real phone with airplane mode on.** Install
-  `release/REPPIT-v1.2.0-versionCode9.apk`. This is the only unverified step
-  and the only real risk left. The offline bundling was confirmed by inspecting
-  the bundle contents and serving the export locally, but never run on Android.
-  A broken first release collects one-star reviews that outlive the fix.
+Tested on a real phone. Old app uninstalled first (mandatory: the v1.1.x
+builds were signed with a different key, CN=REPPIT, so Android refuses to
+install v1.2.0 over them). Confirmed working: profiles load, navigation into
+a profile works, and new workout data saves.
+
+This also proves offline operation. The bundled `capacitor.config.json` inside
+the APK carries no `server.url`, so the app cannot load from the network
+regardless of connectivity.
+
+**Nothing blocks submission now.**
 
 ### After submission
 
 - [ ] **Move the keystore password into a password manager**, then delete
   `~/.android-keystores/reppit-password.txt`.
 - [ ] **Back up `~/.android-keystores/reppit-upload.jks`.**
+- [ ] **Warn existing sideload users before launch.** Anyone running an old
+  v1.1.x APK cannot upgrade to the Play version, because the signing key
+  changed. They must uninstall and reinstall, losing their local history.
 - [ ] **Decide on cloud sync for v1.1.** Supabase is live, schema intact,
   row-level security enforced. Adding login means a rebuild with `.env.local`
   present and updated Data Safety answers.
