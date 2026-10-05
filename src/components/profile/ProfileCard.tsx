@@ -22,7 +22,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
     .slice(0, 2)
 
   return (
-    <Link href={`/profile/${profile.id}`}>
+    <Link href={`/profile?id=${profile.id}`}>
       <Card className="hover:border-[#3498DB] transition-colors cursor-pointer">
         <div className="flex items-center gap-4">
           {/* Avatar with Sex indicator */}

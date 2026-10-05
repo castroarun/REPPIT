@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, use } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Profile } from '@/types'
@@ -24,11 +24,10 @@ import { ThemeToggle, UnitToggle, Logo } from '@/components/ui'
 import { ContextualTip } from '@/components/onboarding'
 
 interface ProgramClientProps {
-  params: Promise<{ id: string }>
+  id: string
 }
 
-export default function ProgramClient({ params }: ProgramClientProps) {
-  const { id } = use(params)
+export default function ProgramClient({ id }: ProgramClientProps) {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)

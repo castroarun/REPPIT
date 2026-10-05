@@ -702,7 +702,7 @@ export default function SettingsPage() {
               </div>
               {currentProfileId ? (
                 <Link
-                  href={`/profile/${currentProfileId}/program`}
+                  href={`/profile/program?id=${currentProfileId}`}
                   className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                     activeRoutineName
                       ? 'bg-green-500 text-white hover:bg-green-600'

@@ -93,7 +93,7 @@ export default function HomePage() {
     if (lastVisitedProfileId) {
       const lastProfile = getProfileById(lastVisitedProfileId)
       if (lastProfile) {
-        router.push(`/profile/${lastVisitedProfileId}`)
+        router.push(`/profile?id=${lastVisitedProfileId}`)
         return
       } else {
         // Profile was deleted, clear the saved preference

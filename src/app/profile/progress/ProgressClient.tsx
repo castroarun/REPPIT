@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui'
 import { Profile, BodyPart, Exercise, ALL_BODY_PARTS, WorkoutSession } from '@/types'
@@ -19,7 +19,7 @@ import { calculateBadges } from '@/lib/calculations/strength'
 import { ContextualTip } from '@/components/onboarding'
 
 interface ProgressPageProps {
-  params: Promise<{ id: string }>
+  id: string
 }
 
 interface BodyPartData {
@@ -40,8 +40,7 @@ interface WorkoutDay {
 }
 
 
-export default function ProgressPage({ params }: ProgressPageProps) {
-  const { id } = use(params)
+export default function ProgressPage({ id }: ProgressPageProps) {
   const { unit } = useUnit()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [bodyPartData, setBodyPartData] = useState<BodyPartData[]>([])
@@ -219,7 +218,7 @@ export default function ProgressPage({ params }: ProgressPageProps) {
       <header className="bg-[#2C3E50] text-white px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href={`/profile/${id}`} className="text-white hover:text-gray-300">
+            <Link href={`/profile?id=${id}`} className="text-white hover:text-gray-300">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>

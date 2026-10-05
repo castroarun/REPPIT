@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, use } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Profile, Exercise, Level, BodyPart, SEX_INFO, LEVEL_COLORS } from '@/types'
@@ -27,11 +27,10 @@ import { ContextualTip, hasSeenTip } from '@/components/onboarding'
 import { areTipsEnabled } from '@/lib/storage/onboarding'
 
 interface ProfileDetailPageProps {
-  params: Promise<{ id: string }>
+  id: string
 }
 
-export default function ProfileDetailPage({ params }: ProfileDetailPageProps) {
-  const { id } = use(params)
+export default function ProfileDetailPage({ id }: ProfileDetailPageProps) {
   const router = useRouter()
   const { unit } = useUnit()
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -245,7 +244,7 @@ export default function ProfileDetailPage({ params }: ProfileDetailPageProps) {
                   })()}
                 </div>
                 <Link
-                  href={`/profile/${profile.id}/edit`}
+                  href={`/profile/edit?id=${profile.id}`}
                   className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -319,7 +318,7 @@ export default function ProfileDetailPage({ params }: ProfileDetailPageProps) {
 
           {/* Progress Link */}
           <Link
-            href={`/profile/${profile.id}/progress`}
+            href={`/profile/progress?id=${profile.id}`}
             className="bg-white dark:bg-gray-800 rounded-lg border border-[#E0E0E0] dark:border-gray-700 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex flex-col items-center justify-center"
           >
             {/* Simple Progress Chart Icon */}

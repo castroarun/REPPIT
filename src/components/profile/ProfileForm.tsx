@@ -186,10 +186,10 @@ export default function ProfileForm({ profile, onCancel }: ProfileFormProps) {
 
       if (isEditing && profile) {
         updateProfile(profile.id, data)
-        router.push(`/profile/${profile.id}`)
+        router.push(`/profile?id=${profile.id}`)
       } else {
         const newProfile = createProfile(data)
-        router.push(`/profile/${newProfile.id}`)
+        router.push(`/profile?id=${newProfile.id}`)
       }
     } catch (error) {
       setErrors({

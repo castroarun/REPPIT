@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Profile } from '@/types'
@@ -9,11 +9,10 @@ import { ProfileForm } from '@/components/profile'
 import { ThemeToggle } from '@/components/ui'
 
 interface EditProfilePageProps {
-  params: Promise<{ id: string }>
+  id: string
 }
 
-export default function EditProfilePage({ params }: EditProfilePageProps) {
-  const { id } = use(params)
+export default function EditProfilePage({ id }: EditProfilePageProps) {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -53,7 +52,7 @@ export default function EditProfilePage({ params }: EditProfilePageProps) {
       <header className="bg-[#2C3E50] text-white px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href={`/profile/${id}`} className="text-white hover:text-gray-300">
+            <Link href={`/profile?id=${id}`} className="text-white hover:text-gray-300">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -78,7 +77,7 @@ export default function EditProfilePage({ params }: EditProfilePageProps) {
       <main className="p-4 max-w-lg mx-auto">
         <ProfileForm
           profile={profile}
-          onCancel={() => router.push(`/profile/${id}`)}
+          onCancel={() => router.push(`/profile?id=${id}`)}
         />
       </main>
     </div>
