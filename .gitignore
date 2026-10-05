@@ -49,3 +49,10 @@ next-env.d.ts
 
 # android bundles
 *.aab
+
+# signing config (contains keystore passwords - never commit)
+android/key.properties
+android/local.properties
+
+# local build artifacts
+/release/
