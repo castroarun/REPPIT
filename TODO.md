@@ -174,18 +174,43 @@ is no project reference and no key inside.
    general fitness tracker, not a medical app. Do not claim medical function.
 10. [ ] **Upload the AAB** and roll out.
 
-### The big timeline question
+### Closed testing gate (CONFIRMED REQUIRED - personal account)
 
-If your developer account is a **personal** account created after 13 Nov 2023,
-Google requires a **closed test with at least 12 testers running continuously
-for 14 days** before you can apply for production access. That is a hard gate
-and the main thing standing between you and a live listing.
+A personal developer account must run a closed test with **at least 12 testers,
+opted in and staying opted in, for 14 continuous days** before Google will
+grant production access. The clock only starts once 12 testers have joined, and
+it resets exposure if the count drops below 12. Plan for roughly three weeks
+from first upload to a public listing.
 
-An **organization** account has no such requirement and can go straight to
-production review.
+1. [ ] **Create a Google Group** for testers, e.g. reppit-testers. Managing a
+   group is far easier than Play Console's raw email list, and testers can be
+   added or removed without editing the track.
+2. [ ] **Complete every "App content" declaration first.** Play blocks the
+   closed track until privacy policy, data safety, content rating, target
+   audience, ads and news declarations are all filled in.
+3. [ ] **Create a Closed testing track** and upload
+   `release/REPPIT-v1.2.0-versionCode9.aab`.
+4. [ ] **Recruit 12+ testers.** They need distinct Google accounts, must accept
+   the opt-in link, and must install the app. Over-recruit to about 15, because
+   people drop out and dropping below 12 is what resets progress.
+5. [ ] **Keep the test running 14 continuous days.** Ask testers to leave it
+   installed. Google looks for genuine engagement, not just installs.
+6. [ ] **Apply for production access** once the 14 days complete. This is a
+   questionnaire about how you tested and what you learned, so keep notes on
+   tester feedback as you go.
+7. [ ] **Then submit to production.** Review typically takes a few days, longer
+   for a first-time developer.
 
-- [ ] **Confirm which account type you have**, then either recruit 12 testers
-  and start the closed test now, or submit straight to production.
+### Use the test window productively
+
+- [ ] **Run the real-device check that is still outstanding** — sideload
+  `release/REPPIT-v1.2.0-versionCode9.apk`, turn on airplane mode, and confirm
+  the offline bundling works. This has never been run on an actual phone.
+- [ ] **Decide on cloud sync for v1.1.** Supabase is confirmed live, the schema
+  is intact and row-level security is enforced. Adding login is a deliberate
+  rebuild with `.env.local` present, plus updated Data Safety answers.
+- [ ] **Delete the duplicate listing file.** `docs/PLAY-STORE-LISTING.md` and
+  `docs/PLAY_STORE_LISTING.md` both exist with different copy.
 
 ---
 
