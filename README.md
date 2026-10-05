@@ -14,16 +14,17 @@
   "stage": "live",
   "progress": 75,
   "complexity": "F",
-  "lastUpdated": "2026-04-27",
+  "lastUpdated": "2026-09-09",
   "targetDate": null,
-  "nextAction": "PRIMMO AI coach integration",
+  "nextAction": "Submit to Google Play Store",
   "blocker": null,
-  "demoUrl": null,
+  "demoUrl": "https://reppit-fitness.vercel.app",
   "techStack": [
-    "Flutter",
-    "Dart",
-    "SQLite",
-    "Riverpod"
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "Capacitor",
+    "Supabase"
   ],
   "shipped": true,
   "linkedinPosted": false
