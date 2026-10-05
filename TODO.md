@@ -174,41 +174,56 @@ is no project reference and no key inside.
    general fitness tracker, not a medical app. Do not claim medical function.
 10. [ ] **Upload the AAB** and roll out.
 
-### Closed testing gate (CONFIRMED REQUIRED - personal account)
+### Production access — ALREADY GRANTED
 
-A personal developer account must run a closed test with **at least 12 testers,
-opted in and staying opted in, for 14 continuous days** before Google will
-grant production access. The clock only starts once 12 testers have joined, and
-it resets exposure if the count drops below 12. Plan for roughly three weeks
-from first upload to a public listing.
+Google has confirmed production access for this account, so the 12-tester /
+14-day closed testing gate does not apply. Submit straight to production.
 
-1. [ ] **Create a Google Group** for testers, e.g. reppit-testers. Managing a
-   group is far easier than Play Console's raw email list, and testers can be
-   added or removed without editing the track.
-2. [ ] **Complete every "App content" declaration first.** Play blocks the
-   closed track until privacy policy, data safety, content rating, target
-   audience, ads and news declarations are all filled in.
-3. [ ] **Create a Closed testing track** and upload
+### Submit to production
+
+Do these in order. Play blocks the release until every App content
+declaration is complete.
+
+1. [ ] **App content declarations** (left sidebar, "Policy and programs" then
+   "App content"). All must be green before a release can be rolled out:
+   - Privacy policy: `https://reppit-fitness.vercel.app/privacy`
+   - Data safety: no data collected, no data shared. True for this build; the
+     bundle was scanned and contains no backend credentials.
+   - Content rating questionnaire: fitness tracker, no objectionable content.
+   - Target audience: adults. Do not declare a child audience, it triggers
+     Families policy requirements.
+   - Ads: no ads.
+   - News app: no.
+   - Government app: no. Do not claim any medical or health-diagnosis function.
+   - App access: all functionality available without logging in. True here.
+2. [ ] **Store listing** — copy from `docs/PLAY-STORE-LISTING.md` (short
+   description is 77 of 80 characters, full description well under the limit).
+   Artwork from `play-store-assets/`: `icon-512.png`,
+   `feature-graphic-1024x500.png`, and the 10 screenshots at 800x1600.
+3. [ ] **Create a Production release** and upload
    `release/REPPIT-v1.2.0-versionCode9.aab`.
-4. [ ] **Recruit 12+ testers.** They need distinct Google accounts, must accept
-   the opt-in link, and must install the app. Over-recruit to about 15, because
-   people drop out and dropping below 12 is what resets progress.
-5. [ ] **Keep the test running 14 continuous days.** Ask testers to leave it
-   installed. Google looks for genuine engagement, not just installs.
-6. [ ] **Apply for production access** once the 14 days complete. This is a
-   questionnaire about how you tested and what you learned, so keep notes on
-   tester feedback as you go.
-7. [ ] **Then submit to production.** Review typically takes a few days, longer
-   for a first-time developer.
+4. [ ] **Accept Play App Signing** when prompted on first upload. You keep
+   `reppit-upload.jks` as the upload key; Google holds the release key.
+5. [ ] **Select countries and regions** for distribution.
+6. [ ] **Submit for review.** First-time submissions commonly take several days
+   and can take longer.
 
-### Use the test window productively
+### Do this BEFORE submitting
 
-- [ ] **Run the real-device check that is still outstanding** — sideload
-  `release/REPPIT-v1.2.0-versionCode9.apk`, turn on airplane mode, and confirm
-  the offline bundling works. This has never been run on an actual phone.
-- [ ] **Decide on cloud sync for v1.1.** Supabase is confirmed live, the schema
-  is intact and row-level security is enforced. Adding login is a deliberate
-  rebuild with `.env.local` present, plus updated Data Safety answers.
+- [ ] **Sideload and test on a real phone with airplane mode on.** Install
+  `release/REPPIT-v1.2.0-versionCode9.apk`. This is the only unverified step
+  and the only real risk left. The offline bundling was confirmed by inspecting
+  the bundle contents and serving the export locally, but never run on Android.
+  A broken first release collects one-star reviews that outlive the fix.
+
+### After submission
+
+- [ ] **Move the keystore password into a password manager**, then delete
+  `~/.android-keystores/reppit-password.txt`.
+- [ ] **Back up `~/.android-keystores/reppit-upload.jks`.**
+- [ ] **Decide on cloud sync for v1.1.** Supabase is live, schema intact,
+  row-level security enforced. Adding login means a rebuild with `.env.local`
+  present and updated Data Safety answers.
 - [ ] **Delete the duplicate listing file.** `docs/PLAY-STORE-LISTING.md` and
   `docs/PLAY_STORE_LISTING.md` both exist with different copy.
 
