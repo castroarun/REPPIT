@@ -196,10 +196,11 @@ declaration is complete.
    - News app: no.
    - Government app: no. Do not claim any medical or health-diagnosis function.
    - App access: all functionality available without logging in. True here.
-2. [ ] **Store listing** — copy from `docs/PLAY-STORE-LISTING.md` (short
-   description is 77 of 80 characters, full description well under the limit).
-   Artwork from `play-store-assets/`: `icon-512.png`,
-   `feature-graphic-1024x500.png`, and the 10 screenshots at 800x1600.
+2. [ ] **Store listing** — everything paste-ready in
+   `docs/PLAY-STORE-SUBMISSION.md`. Artwork: `play-store-assets/icon-512.png`,
+   `play-store-assets/feature-graphic-1024x500.png`, and the 8 numbered
+   screenshots in `play-store-assets/screenshots-final/` uploaded in filename
+   order. Play caps phone screenshots at 8.
 3. [ ] **Create a Production release** and upload
    `release/REPPIT-v1.2.0-versionCode9.aab`.
 4. [ ] **Accept Play App Signing** when prompted on first upload. You keep
@@ -232,8 +233,10 @@ regardless of connectivity.
 - [ ] **Decide on cloud sync for v1.1.** Supabase is live, schema intact,
   row-level security enforced. Adding login means a rebuild with `.env.local`
   present and updated Data Safety answers.
-- [ ] **Delete the duplicate listing file.** `docs/PLAY-STORE-LISTING.md` and
-  `docs/PLAY_STORE_LISTING.md` both exist with different copy.
+- [ ] **Delete the superseded listing files** once live.
+  `docs/PLAY-STORE-LISTING.md` and `docs/PLAY_STORE_LISTING.md` carry a contact
+  address on a domain owned by someone else and a dead website link.
+  `docs/PLAY-STORE-SUBMISSION.md` replaces both.
 
 ---
 

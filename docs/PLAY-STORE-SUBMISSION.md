@@ -14,6 +14,8 @@ both carry stale or wrong values.
 | Pricing | Free |
 | Privacy policy | `https://reppit-fitness.vercel.app/privacy` (verified live) |
 | Website | `https://reppit-fitness.vercel.app` |
+| Developer display name | `castronix` |
+| Contact email | `arun.castromin@gmail.com` |
 
 ### Short description (77 of 80 characters)
 
@@ -69,9 +71,17 @@ it may be ranked lower on tablet and Chromebook surfaces.
 | Target audience | Adults. Do not tick a child age band. |
 | Content rating | Expect Everyone |
 
-## Still needs you
+## Note on the contact email
 
-- **Contact email.** Play requires a real, monitored address. The old docs said
-  `support@reppit.app`, but that domain belongs to someone else's Shopify store
-  and is not yours.
-- **Developer display name.** Shown publicly next to the app.
+Google publishes the contact email on the public listing page, where anyone can
+see it and scrapers can harvest it. `arun.castromin@gmail.com` is a personal
+address. It works, and you can change it later in Play Console without
+resubmitting the app. If the volume ever becomes a nuisance, switch it to a
+dedicated address or a Gmail alias.
+
+## Superseded files
+
+`docs/PLAY-STORE-LISTING.md` and `docs/PLAY_STORE_LISTING.md` both predate this
+sheet and contain wrong contact details and a dead website link. Keep them only
+for the long description text, which this sheet points to. Delete them once the
+listing is live.
