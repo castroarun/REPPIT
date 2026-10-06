@@ -179,6 +179,36 @@ is no project reference and no key inside.
 Google has confirmed production access for this account, so the 12-tester /
 14-day closed testing gate does not apply. Submit straight to production.
 
+### BLOCKED: upload key reset pending (requested 2026-10-06)
+
+Play Console had the **old, lost** v1.1.x key registered as the upload
+certificate (`42:7C:9A:4C:E0:F2:...:73:D2:77:AE`). Any AAB signed with the
+current keystore would be rejected as the wrong key.
+
+An upload key reset was requested, supplying
+`~/.android-keystores/reppit-upload_certificate.pem`
+(fingerprint `63:1E:81:7F:6E:A1:F9:33:...:86:1C:72:0F`).
+
+- **Do not cancel the pending request.**
+- Google typically actions this in 1-2 business days.
+- [ ] **When approved**, confirm the Upload key certificate on the App signing
+  page shows `63:1E:81:7F`, then upload the AAB.
+
+For reference, the three keys involved:
+
+| Key | SHA-256 | Where |
+|---|---|---|
+| Play app signing (Google holds) | `F3:57:ED:60:...:AD:ED:EE:86` | Google re-signs with this |
+| New upload key (ours) | `63:1E:81:7F:...:18:86:1C:72:0F` | `reppit-upload.jks` |
+| Old upload key (lost) | `42:7C:9A:4C:...:73:D2:77:AE` | gone, was never committed |
+
+Nothing about the app build changes. This is purely which key Google accepts.
+
+### Do while the key reset is pending
+
+All listing work is independent of the key. Finish it now so that when the
+reset lands, only the upload and submit remain.
+
 ### Submit to production
 
 Do these in order. Play blocks the release until every App content
