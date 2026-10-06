@@ -43,19 +43,29 @@ gym.
 
 ## Artwork
 
-| Asset | File | Status |
-|---|---|---|
-| Icon | `play-store-assets/icon-512.png` | 512x512, ready |
-| Feature graphic | `play-store-assets/feature-graphic-1024x500.png` | 1024x500, ready |
-| Phone screenshots | `play-store-assets/screenshots-final/` | 8 files, 800x1600, upload in filename order |
+Play requires screenshots at **exactly 16:9 or 9:16**. An earlier set at
+800x1600 was 1:2 and did not qualify. Everything below is exactly 9:16.
 
-Play accepts a maximum of 8 phone screenshots. Two were held back:
-`progress-2.png` duplicates the progress view, and
-`Settings-and-customizations.png` is the least persuasive. Both remain in
-`play-store-assets/screenshots/` if you want to swap one in.
+| Slot | Folder | Size | Required |
+|---|---|---|---|
+| App icon | `play-store-assets/icon-512.png` | 512x512 | yes |
+| Feature graphic | `play-store-assets/feature-graphic-1024x500.png` | 1024x500 | yes |
+| Phone screenshots | `play-store-assets/phone/` | 900x1600 | yes, 2-8 |
+| 7-inch tablet | `play-store-assets/tablet7/` | 1080x1920 | yes, up to 8 |
+| 10-inch tablet | `play-store-assets/tablet10/` | 1440x2560 | yes, up to 8 |
 
-Tablet screenshots are optional. Without them the listing still publishes, but
-it may be ranked lower on tablet and Chromebook surfaces.
+8 files in each folder, numbered for upload order. All validated: exact 9:16,
+within each slot's pixel bounds, largest file 1.3 MB against an 8 MB cap.
+
+Tablet shots are the phone screens centred on a larger canvas with the app's
+own background colour. The app is mobile-first, so there is no separate tablet
+layout to capture.
+
+### Correction needed in the live listing
+
+The published description says "23 exercises". The app ships **76 exercises
+across 6 body parts** (chest, back, shoulders, legs, arms, core), counted from
+`src/lib/calculations/strength.ts`. Fix that number, it undersells the app.
 
 ## Console answers
 
