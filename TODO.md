@@ -77,6 +77,28 @@ with no Supabase credentials.
 
 ## Security
 
+### Accepted risk: keystore password in git history (decided 2026-10-06)
+
+`android/key.properties` was committed to this public repo and carried the
+current keystore password. It is now untracked, but it remains readable in git
+history. Rotating the password was offered and **declined**; the risk is
+accepted.
+
+**Why this is survivable:** the password is useless on its own. Signing needs
+`reppit-upload.jks`, which has never been committed and never left the local
+machine.
+
+**What this depends on:** that keystore file staying private. If it is ever
+uploaded, emailed, or synced somewhere public, the two halves combine into full
+control of REPPIT updates. Back it up only to private storage.
+
+**If that ever happens**, the fix is `keytool -storepasswd` plus
+`keytool -keypasswd`, which changes the password while keeping the same key
+pair, so the certificate fingerprint and any Play upload key registration stay
+valid.
+
+
+
 - [ ] **Treat the old keystore password as public.**
   **Why:** `android/key.properties` sat in a public repo from the initial commit
   with `storePassword`, `keyPassword`, and the alias in cleartext. It is now
