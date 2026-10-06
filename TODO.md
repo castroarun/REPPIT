@@ -204,6 +204,35 @@ For reference, the three keys involved:
 
 Nothing about the app build changes. This is purely which key Google accepts.
 
+### Listing polish (NOT mandatory, do when convenient)
+
+Deferred by decision on 2026-10-06. The listing is live and Google already
+accepted the existing assets, so none of this blocks launch. Bundle these into
+one submission rather than several.
+
+- [ ] **Replace the phone screenshots.** Live set predates the 16:9 / 9:16
+  rule and only fills 5 of 8 slots. Compliant replacements at exactly 9:16 are
+  ready in `play-store-assets/phone/` (900x1600, 8 files, numbered for upload
+  order).
+- [ ] **Fix the exercise count in the description.** It says "23 exercises".
+  The app ships **76 exercises across 6 body parts** (chest, back, shoulders,
+  legs, arms, core), counted from `src/lib/calculations/strength.ts`. The
+  current number undersells the app to anyone comparing fitness apps.
+
+### Where to check the upload key reset
+
+`https://play.google.com/console/u/0/developers/5549510319515561851/app/4975909328212680092/keymanagement`
+
+Look at the **Upload key certificate** block, SHA-256 line.
+
+| Shows | Meaning |
+|---|---|
+| `42:7C:9A:4C:...` | still the old key, reset not actioned yet, keep waiting |
+| `63:1E:81:7F:...` | approved, upload the AAB now |
+
+The "pending request" notice under *Request upload key reset* disappears once
+Google actions it.
+
 ### Do while the key reset is pending
 
 All listing work is independent of the key. Finish it now so that when the
