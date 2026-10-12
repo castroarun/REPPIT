@@ -321,6 +321,30 @@ regardless of connectivity.
 
 ---
 
+## Parked: iOS / Apple App Store (decided 2026-10-12)
+
+**Not pursuing for now.** The Apple Developer Program costs $99/year on a
+recurring basis, against Google's $25 one-off. Not worth committing to before
+knowing whether REPPIT finds an audience on Android.
+
+Two other facts recorded so this does not get re-researched:
+
+- **Building for iOS needs a Mac.** Xcode is macOS-only and there is no
+  supported path from Windows. Options if revisited: a used Mac mini, a rented
+  cloud Mac (~$20-30/month), or a CI service with macOS runners such as
+  Codemagic or GitHub Actions.
+- **Apple's review is stricter than Google's** about apps that wrap a website,
+  under their Minimum Functionality guideline. REPPIT has a reasonable case now
+  that it bundles assets and works offline, but approval is not a given.
+
+The iOS platform was never added to this project; there is no `ios/` folder and
+`@capacitor/ios` is not installed. Revisit only if Android uptake justifies it.
+
+**An Android APK cannot be installed on an iPhone.** Different package formats
+entirely. Nothing to try here.
+
+---
+
 ## Known pre-existing issues
 
 - [ ] **65 ESLint errors across the codebase**, mostly "calling setState
