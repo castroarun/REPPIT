@@ -76,15 +76,19 @@ Start your strength journey today. Download REPPIT and know your numbers.
 
 ### What's new (release notes for v1.2.0)
 
+Paste this whole thing, language tags included. Play requires the `<en-US>`
+wrapper and the field starts out showing it as a placeholder.
+
 ```
-REPPIT now works completely offline. The whole app lives on your phone, so
-your workouts load instantly and nothing breaks when the signal drops at the
-gym.
+<en-US>
+REPPIT now works completely offline. The whole app lives on your phone, so your workouts load instantly and nothing breaks when the signal drops at the gym.
 
 - Works with no internet connection
 - Faster screen loading
 - More reliable navigation between profiles and progress
+</en-US>
 ```
+
 
 ## Artwork
 
