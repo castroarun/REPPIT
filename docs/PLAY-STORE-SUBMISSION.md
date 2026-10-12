@@ -25,9 +25,54 @@ Track your strength standards. Log workouts. See your progress. Get stronger.
 
 ### Full description
 
-Use the version in `PLAY-STORE-LISTING.md` under "Full Description". It is
-1442 characters, well inside the 4000 limit, and its "No account required -
-works offline" line is accurate for this build.
+Paste exactly this. The exercise count is corrected to the real figure.
+
+```
+REPPIT helps you track your strength journey with personalized standards based on your body weight.
+
+FEATURES
+
+Personalized Strength Standards
+Calculate your target weights for 76 exercises based on your body weight. Know exactly what numbers to hit for Beginner, Novice, Intermediate, and Advanced levels.
+
+Multiple Profiles
+Create up to 5 profiles - perfect for personal trainers, couples, or families sharing one device.
+
+Workout Logger
+Log your sets, reps, and weights. Track every workout and see your history at a glance.
+
+Progress Tracking
+Visual charts show your strength journey over time. See how far you've come with clear progress indicators.
+
+Muscle Heatmap
+Interactive body visualization shows which muscles you're working and where you're strongest.
+
+Achievement System
+Earn badges as you hit milestones. Celebrate PRs with confetti animations!
+
+AI Coach Tips
+Get personalized tips based on your workout patterns and progress.
+
+EXERCISES COVERED
+
+76 exercises across 6 body parts:
+
+Chest: Bench Press, Incline Press, Dumbbell Fly, Push-ups, Chest Press Machine, Pec Deck and more
+Back: Deadlift, Barbell Row, Pull-ups, Lat Pulldown, T-Bar Row, Seated Row and more
+Shoulders: Overhead Press, Lateral Raise, Face Pull, Rear Delt Fly and more
+Legs: Squat, Leg Press, Romanian Deadlift, Hip Thrust, Bulgarian Split Squat, Hack Squat and more
+Arms: Barbell Curl, Tricep Dip, Hammer Curl, Preacher Curl, Cable Curl and more
+Core: Plank, Cable Crunch, Hanging Leg Raise, Russian Twist and more
+
+WHY REPPIT?
+
+- No account required - works offline
+- Clean, simple interface
+- Dark mode support
+- Free forever, no ads
+
+Start your strength journey today. Download REPPIT and know your numbers.
+```
 
 ### What's new (release notes for v1.2.0)
 
