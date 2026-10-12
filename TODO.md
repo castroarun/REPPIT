@@ -259,90 +259,22 @@ Google actions it.
 All listing work is independent of the key. Finish it now so that when the
 reset lands, only the upload and submit remain.
 
-### Submit to production
+### SUBMITTED TO PRODUCTION (2026-10-12)
 
-Do these in order. Play blocks the release until every App content
-declaration is complete.
+`9 (1.2.0)` uploaded to the production track and submitted as a **full
+rollout**. Status: in review.
 
-1. [ ] **App content declarations** (left sidebar, "Policy and programs" then
-   "App content"). All must be green before a release can be rolled out:
-   - Privacy policy: `https://reppit-fitness.vercel.app/privacy`
-   - Data safety: no data collected, no data shared. True for this build; the
-     bundle was scanned and contains no backend credentials.
-   - Content rating questionnaire: fitness tracker, no objectionable content.
-   - Target audience: adults. Do not declare a child audience, it triggers
-     Families policy requirements.
-   - Ads: no ads.
-   - News app: no.
-   - Government app: no. Do not claim any medical or health-diagnosis function.
-   - App access: all functionality available without logging in. True here.
-2. [ ] **Store listing** — everything paste-ready in
-   `docs/PLAY-STORE-SUBMISSION.md`. Artwork: `play-store-assets/icon-512.png`,
-   `play-store-assets/feature-graphic-1024x500.png`, and the 8 numbered
-   screenshots in `play-store-assets/screenshots-final/` uploaded in filename
-   order. Play caps phone screenshots at 8.
-3. [ ] **Create a Production release** and upload
-   `release/REPPIT-v1.2.0-versionCode9.aab`.
-4. [ ] **Accept Play App Signing** when prompted on first upload. You keep
-   `reppit-upload.jks` as the upload key; Google holds the release key.
-5. [ ] **Select countries and regions** for distribution.
-6. [ ] **Submit for review.** First-time submissions commonly take several days
-   and can take longer.
+Managed publishing is **off**, so the app goes live automatically the moment
+Google approves. No further click is needed.
 
-### Device verification — DONE (2026-10-05)
-
-Tested on a real phone. Old app uninstalled first (mandatory: the v1.1.x
-builds were signed with a different key, CN=REPPIT, so Android refuses to
-install v1.2.0 over them). Confirmed working: profiles load, navigation into
-a profile works, and new workout data saves.
-
-This also proves offline operation. The bundled `capacitor.config.json` inside
-the APK carries no `server.url`, so the app cannot load from the network
-regardless of connectivity.
-
-**Nothing blocks submission now.**
-
-### After submission
-
-- [ ] **Move the keystore password into a password manager**, then delete
-  `~/.android-keystores/reppit-password.txt`.
-- [ ] **Back up `~/.android-keystores/reppit-upload.jks`.**
-- [ ] **Warn existing sideload users before launch.** Anyone running an old
-  v1.1.x APK cannot upgrade to the Play version, because the signing key
-  changed. They must uninstall and reinstall, losing their local history.
-- [ ] **Decide on cloud sync for v1.1.** Supabase is live, schema intact,
-  row-level security enforced. Adding login means a rebuild with `.env.local`
-  present and updated Data Safety answers.
-- [ ] **Delete the superseded listing files** once live.
-  `docs/PLAY-STORE-LISTING.md` and `docs/PLAY_STORE_LISTING.md` carry a contact
-  address on a domain owned by someone else and a dead website link.
-  `docs/PLAY-STORE-SUBMISSION.md` replaces both.
-
----
-
-## Parked: iOS / Apple App Store (decided 2026-10-12)
-
-**Not pursuing for now.** The Apple Developer Program costs $99/year on a
-recurring basis, against Google's $25 one-off. Not worth committing to before
-knowing whether REPPIT finds an audience on Android.
-
-Two other facts recorded so this does not get re-researched:
-
-- **Building for iOS needs a Mac.** Xcode is macOS-only and there is no
-  supported path from Windows. Options if revisited: a used Mac mini, a rented
-  cloud Mac (~$20-30/month), or a CI service with macOS runners such as
-  Codemagic or GitHub Actions.
-- **Apple's review is stricter than Google's** about apps that wrap a website,
-  under their Minimum Functionality guideline. REPPIT has a reasonable case now
-  that it bundles assets and works offline, but approval is not a given.
-
-The iOS platform was never added to this project; there is no `ios/` folder and
-`@capacitor/ios` is not installed. Revisit only if Android uptake justifies it.
-
-**An Android APK cannot be installed on an iPhone.** Different package formats
-entirely. Nothing to try here.
-
----
+- [ ] **Wait for the review outcome.** First production reviews commonly take
+  a few days and can run longer. Google emails `arun.castromin@gmail.com`
+  either way, and the Publishing overview page shows live status.
+- [ ] **If rejected**, paste the stated reason into a session rather than
+  guessing. Rejections name a specific policy.
+- [ ] **Once live**, tell the friends running the old sideloaded APK that they
+  must uninstall before installing from Play. The signing key changed, so the
+  update will not apply over it, and uninstalling clears their logged workouts.
 
 ## Known pre-existing issues
 
